@@ -17,10 +17,10 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        <!-- Model dependency -->
+        <!-- Common dependency -->
         <dependency>
             <groupId>project.smarthome</groupId>
-            <artifactId>Model</artifactId>
+            <artifactId>Common</artifactId>
         </dependency>
 
         <!-- Spring Boot Web -->

@@ -13,10 +13,16 @@
         <relativePath>../ROOT</relativePath>
     </parent>
 
-    <artifactId>Model</artifactId>
+    <artifactId>Common</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
+        <!-- Jackson Databind -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+
         <!-- Spring Boot Starter cho basic features -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -26,11 +26,11 @@
     </properties>
 
     <modules>
-        <module>../Model</module>
+        <module>../Common</module>
         <module>../CoreService</module>
         <module>../DataService</module>
-<!--        <module>../AdminPortal</module>-->
-<!--        <module>../CustomerPortal</module>-->
+        <module>../AdminPortal</module>
+        <module>../CustomerPortal</module>
     </modules>
 
     <!-- Dependency Management - Quản lý versions cho tất cả modules -->
@@ -38,7 +38,7 @@
         <dependencies>
             <dependency>
                 <groupId>project.smarthome</groupId>
-                <artifactId>Model</artifactId>
+                <artifactId>Common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

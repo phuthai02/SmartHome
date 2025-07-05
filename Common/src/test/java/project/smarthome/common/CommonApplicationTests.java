@@ -1,10 +1,10 @@
-package project.smarthome.model;
+package project.smarthome.common;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ModelApplicationTests {
+class CommonApplicationTests {
 
     @Test
     void contextLoads() {

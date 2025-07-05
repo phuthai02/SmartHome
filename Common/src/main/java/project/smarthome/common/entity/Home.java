@@ -1,4 +1,4 @@
-package project.smarthome.model.entity;
+package project.smarthome.common.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
