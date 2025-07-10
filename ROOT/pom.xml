@@ -23,6 +23,7 @@
         <spring.boot.version>3.5.3</spring.boot.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
+        <spring-cloud.version>2025.0.0</spring-cloud.version>
     </properties>
 
     <modules>
@@ -30,7 +31,7 @@
         <module>../CoreService</module>
         <module>../DataService</module>
         <module>../AdminPortal</module>
-        <module>../CustomerPortal</module>
+<!--        <module>../CustomerPortal</module>-->
     </modules>
 
     <!-- Dependency Management - Quản lý versions cho tất cả modules -->
@@ -45,6 +46,13 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>1.18.30</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

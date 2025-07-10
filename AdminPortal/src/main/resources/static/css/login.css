@@ -1,0 +1,508 @@
+:root {
+    --primary-color: #275d88;
+    --primary-light: #74c2d8;
+    --primary-dark: #1d2c42;
+
+    --secondary-color: #54898a;
+    --secondary-light: #e7f1f2;
+    --secondary-dark: #18344b;
+
+    --bg-gradient-start: #1d2c42;
+    --bg-gradient-end: #204e72;
+
+    --text-primary: #1e293b;
+    --text-secondary: #334155;
+    --text-muted: #64748b;
+
+    --white: #ffffff;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+
+    --shadow-primary: rgba(32, 78, 114, 0.2);
+    --shadow-secondary: rgba(115, 187, 202, 0.15);
+    --border-primary: rgba(32, 78, 114, 0.4);
+    --hover-bg: rgba(32, 78, 114, 0.08);
+    --focus-ring: rgba(32, 78, 114, 0.3);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.login-container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    box-shadow: 0 32px 64px var(--shadow-primary);
+    border: 1px solid var(--border-primary);
+    padding: 48px 60px;
+    width: 100%;
+    max-width: 900px;
+    position: relative;
+    overflow: hidden;
+    animation: slideInUp 0.8s ease-out;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.logo-section {
+    text-align: left;
+}
+
+.logo {
+    width: 200px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border-radius: 12px;
+    margin: 0 0 16px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: white;
+    font-weight: 600;
+    letter-spacing: 2px;
+    animation: float 3s ease-in-out infinite;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+}
+
+.welcome-text {
+    color: var(--primary-color);
+    font-size: 42px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    letter-spacing: -1px;
+    line-height: 1.1;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 0;
+    line-height: 1.6;
+}
+
+.form-group {
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.form-label {
+    display: block;
+    color: var(--primary-color);
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 16px 20px;
+    border: 2px solid var(--primary-color);
+    border-radius: 12px;
+    font-size: 16px;
+    color: var(--text-primary);
+    background: var(--white);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+}
+
+.form-input:focus {
+    border-color: var(--secondary-color);
+    background: white;
+    box-shadow: 0 0 0 4px var(--focus-ring);
+    transform: translateY(-2px);
+}
+
+.form-input:hover {
+    border-color: var(--secondary-color);
+    background: white;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px;
+    transition: color 0.3s ease;
+}
+
+.password-toggle:hover {
+    color: var(--primary-color);
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.remember-me input[type="checkbox"] {
+    display: none;
+}
+
+.checkbox-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--primary-color);
+    border-radius: 4px;
+    background: white;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.checkbox-custom:hover {
+    border-color: var(--secondary-color);
+    background: var(--hover-bg);
+    transform: scale(1.1);
+}
+
+.remember-me input[type="checkbox"]:checked + .checkbox-custom {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border-color: var(--primary-color);
+    transform: scale(1.05);
+}
+
+.remember-me input[type="checkbox"]:checked + .checkbox-custom::after {
+    content: '✓';
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    animation: checkmark 0.3s ease-in-out;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes checkmark {
+    0% {
+        transform: scale(0) rotate(180deg);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+.remember-me label {
+    color: var(--text-secondary);
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.3s ease;
+}
+
+.remember-me label:hover {
+    color: var(--primary-color);
+}
+
+.forgot-password a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.forgot-password a:hover {
+    color: var(--secondary-color);
+}
+
+.login-button {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    position: relative;
+    overflow: hidden;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.login-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 32px var(--shadow-primary), 0 4px 8px var(--shadow-secondary);
+}
+
+.login-button:active {
+    transform: translateY(0);
+}
+
+.login-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.login-button:hover::before {
+    left: 100%;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+}
+
+.divider span {
+    margin: 0 16px;
+}
+
+.signup-link {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.signup-link a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.signup-link a:hover {
+    color: var(--secondary-color);
+}
+
+.login-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(45deg, var(--primary-color) 0%, transparent 70%);
+    border-radius: 0 24px 0 100px;
+    opacity: 0.2;
+}
+
+.login-container::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(45deg, var(--primary-color) 0%, transparent 70%);
+    border-radius: 0 80px 0 24px;
+    opacity: 0.1;
+}
+
+.galaxy-circle {
+    position: absolute;
+    bottom: -75px;
+    left: -75px;
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(45deg, var(--primary-color) 0%, var(--secondary-color) 70%);
+    border-radius: 50%;
+    opacity: 0.1;
+    z-index: -1;
+}
+
+.login-container {
+    box-shadow: 0 32px 64px var(--shadow-primary), 0 0 0 1px var(--shadow-secondary);
+}
+
+.logo::after {
+    content: '⭐';
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: 12px;
+    color: var(--secondary-color);
+    animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+    0%, 100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(1.5) rotate(90deg);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 24px 20px;
+        max-width: 440px;
+    }
+
+    .logo-section {
+        text-align: center;
+    }
+
+    .logo {
+        margin: 0 auto 12px auto;
+    }
+
+    .welcome-text {
+        font-size: 32px;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        text-align: center;
+        font-size: 16px;
+        margin-bottom: 0;
+    }
+
+    .form-group {
+        margin-bottom: 12px;
+    }
+
+    .login-button {
+        margin-top: 16px;
+    }
+
+    .divider {
+        margin: 16px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 16px;
+    }
+
+    .login-container {
+        padding: 20px 16px;
+        border-radius: 16px;
+        gap: 16px;
+    }
+
+    .welcome-text {
+        font-size: 28px;
+    }
+
+    .logo {
+        width: 180px;
+        height: 40px;
+        font-size: 16px;
+        margin: 0 auto 10px auto;
+    }
+
+    .form-input {
+        padding: 14px 16px;
+        font-size: 14px;
+    }
+
+    .form-label {
+        font-size: 13px;
+        margin-bottom: 5px;
+    }
+
+    .remember-me label {
+        font-size: 13px;
+    }
+
+    .forgot-password a {
+        font-size: 13px;
+    }
+
+    .login-button {
+        padding: 14px;
+        font-size: 15px;
+        margin-top: 16px;
+    }
+
+    .divider {
+        margin: 16px 0;
+        font-size: 13px;
+    }
+
+    .signup-link {
+        font-size: 13px;
+    }
+
+    .checkbox-custom {
+        width: 18px;
+        height: 18px;
+    }
+
+    .remember-me {
+        gap: 4px;
+    }
+
+    .form-group {
+        margin-bottom: 10px;
+    }
+}

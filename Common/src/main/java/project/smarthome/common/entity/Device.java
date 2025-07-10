@@ -17,8 +17,10 @@ public class Device {
     @Column(name = "NAME")
     private String name;
 
-    @Column(name = "TYPE")
-    private String type;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TYPE")
+    @JsonBackReference
+    private DeviceType type;
 
     @Column(name = "STATUS")
     private String status;
