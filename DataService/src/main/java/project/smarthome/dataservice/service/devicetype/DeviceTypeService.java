@@ -9,6 +9,7 @@ import project.smarthome.dataservice.service.BaseService;
 
 @Service
 public class DeviceTypeService extends BaseService<DeviceType, Long> {
+
     @Autowired
     private DeviceTypeRepository deviceTypeRepository;
 

@@ -9,6 +9,7 @@ import project.smarthome.dataservice.service.BaseService;
 
 @Service
 public class FloorService extends BaseService<Floor, Long> {
+
     @Autowired
     private FloorRepository floorRepository;
 

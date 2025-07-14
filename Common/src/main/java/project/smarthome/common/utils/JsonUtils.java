@@ -24,4 +24,5 @@ public class JsonUtils {
             throw new RuntimeException("Lỗi khi chuyển JSON thành object", e);
         }
     }
+
 }

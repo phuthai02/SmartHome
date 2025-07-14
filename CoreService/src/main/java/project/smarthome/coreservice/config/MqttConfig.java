@@ -2,7 +2,6 @@ package project.smarthome.coreservice.config;
 
 import com.hivemq.client.mqtt.MqttClient;
 import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +13,6 @@ import org.springframework.messaging.MessageHandler;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
-@Slf4j
 @Configuration
 public class MqttConfig {
 
@@ -40,7 +38,7 @@ public class MqttConfig {
     public Mqtt5BlockingClient hiveMqttClient() {
         Mqtt5BlockingClient client = MqttClient.builder()
                 .useMqttVersion5()
-                .identifier(clientId + "_" + UUID.randomUUID().toString().substring(0, 8))
+                .identifier(clientId + "-" + UUID.randomUUID().toString().substring(0, 8))
                 .serverHost(host)
                 .serverPort(port)
                 .sslWithDefaultConfig()
@@ -53,7 +51,6 @@ public class MqttConfig {
                 .applySimpleAuth()
                 .send();
 
-        log.info("[MQTT] Connected successfully to HiveMQ at {}:{}", host, port);
         return client;
     }
 
@@ -73,8 +70,6 @@ public class MqttConfig {
                     .topic(topic)
                     .payload(StandardCharsets.UTF_8.encode(payload))
                     .send();
-
-            log.info("[MQTT] Message published successfully - {}: {}", topic, payload);
         };
     }
 }
