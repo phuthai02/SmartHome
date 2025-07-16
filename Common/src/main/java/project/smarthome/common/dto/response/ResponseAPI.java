@@ -1,23 +1,21 @@
 package project.smarthome.common.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseAPI {
     private boolean success;
     private String message;
     private Object data;
 
-    public ResponseAPI(boolean success) {
-        this.success = success;
-    }
-
-    public ResponseAPI(boolean success, String message) {
+    private ResponseAPI(boolean success, String message) {
         this.success = success;
         this.message = message;
     }
 
-    public ResponseAPI(boolean success, Object data) {
+    private ResponseAPI(boolean success, Object data) {
         this.success = success;
         this.data = data;
     }
@@ -26,8 +24,8 @@ public class ResponseAPI {
         return new ResponseAPI(true, data);
     }
 
-    public static ResponseAPI success() {
-        return new ResponseAPI(true);
+    public static ResponseAPI success(String message) {
+        return new ResponseAPI(true, message);
     }
 
     public static ResponseAPI error(String message) {

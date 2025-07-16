@@ -1,4 +1,4 @@
-package project.smarthome.coreservice.config;
+package project.smarthome.coreservice.config.mqtt;
 
 import com.hivemq.client.mqtt.MqttClient;
 import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;

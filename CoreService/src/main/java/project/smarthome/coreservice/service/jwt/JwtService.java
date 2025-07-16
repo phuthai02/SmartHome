@@ -57,10 +57,10 @@ public class JwtService {
         redisService.delete(key);
     }
 
-    public boolean isAccessTokenValid(String token, String username) {
+    public boolean isAccessTokenValid(String accessToken, String username) {
         String key = "jwt:access:" + username;
         String storedToken = redisService.get(key);
-        return token.equals(storedToken) && !isExpired(token);
+        return accessToken.equals(storedToken) && !isExpired(accessToken);
     }
 
     public boolean isRefreshTokenValid(String refreshToken, String username) {

@@ -1,4 +1,4 @@
-package project.smarthome.coreservice.config;
+package project.smarthome.coreservice.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

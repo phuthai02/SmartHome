@@ -30,7 +30,7 @@
         <module>../Common</module>
         <module>../CoreService</module>
         <module>../DataService</module>
-        <module>../AdminPortal</module>
+<!--        <module>../AdminPortal</module>-->
 <!--        <module>../CustomerPortal</module>-->
     </modules>
 

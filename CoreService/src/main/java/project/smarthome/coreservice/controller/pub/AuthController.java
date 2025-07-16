@@ -1,4 +1,4 @@
-package project.smarthome.coreservice.controller;
+package project.smarthome.coreservice.controller.pub;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import project.smarthome.coreservice.service.user.UserDetailsSecurityService;
 
 @Slf4j
 @RestController
-@RequestMapping("/pub/auth")
+@RequestMapping("auth")
 public class AuthController {
 
     @Autowired
@@ -53,7 +53,7 @@ public class AuthController {
 
             return ResponseEntity.ok(ResponseAPI.success(response));
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseAPI.error("Invalid credentials"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseAPI.error("Username or password is incorrect"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseAPI.error(e.getMessage()));
         }
@@ -82,7 +82,7 @@ public class AuthController {
 
             return ResponseEntity.ok(ResponseAPI.success(response));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseAPI.error("Refresh failed"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseAPI.error(e.getMessage()));
         }
     }
 
@@ -103,7 +103,7 @@ public class AuthController {
 
             return ResponseEntity.ok(ResponseAPI.success("Logout successful"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseAPI.error("Logout failed"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseAPI.error(e.getMessage()));
         }
     }
 
@@ -123,7 +123,7 @@ public class AuthController {
 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseAPI.error("Invalid token"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseAPI.error("Validation failed"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseAPI.error(e.getMessage()));
         }
     }
 }

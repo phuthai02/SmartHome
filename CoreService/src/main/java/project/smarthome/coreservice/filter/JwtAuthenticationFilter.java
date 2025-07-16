@@ -15,7 +15,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import project.smarthome.common.dto.response.ResponseAPI;
 import project.smarthome.common.utils.Constants;
+import project.smarthome.common.utils.JsonUtils;
 import project.smarthome.coreservice.service.jwt.JwtService;
 import project.smarthome.coreservice.service.user.UserDetailsSecurityService;
 
@@ -49,6 +51,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     } else {
                         log.info("Invalid token for user: {}", username);
+                        sendError(response, "Invalid token", HttpServletResponse.SC_UNAUTHORIZED);
+                        return;
                     }
                 }
             }
@@ -92,12 +96,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         response.setStatus(statusCode);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        String jsonResponse = String.format(
-                "{\"error\": \"%s\", \"message\": \"%s\", \"timestamp\": %d}",
-                "Authentication Failed",
-                message,
-                System.currentTimeMillis()
-        );
-        response.getWriter().write(jsonResponse);
+        String error = JsonUtils.toJson(ResponseAPI.error(message));
+        response.getWriter().write(error);
     }
 }
