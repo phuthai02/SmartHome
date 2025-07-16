@@ -20,6 +20,6 @@ public class DeviceType {
     private Integer code;
 
     @OneToMany(mappedBy = "type", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference("type-device")
     private List<Device> devices;
 }

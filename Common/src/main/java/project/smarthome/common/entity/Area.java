@@ -23,10 +23,10 @@ public class Area {
 
     @ManyToOne
     @JoinColumn(name = "FLOOR_ID")
-    @JsonBackReference
+    @JsonBackReference("floor-area")
     private Floor floor;
 
     @OneToMany(mappedBy = "area", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference("area-device")
     private List<Device> devices = new ArrayList<>();
 }

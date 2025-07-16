@@ -7,13 +7,11 @@ import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import project.smarthome.coreservice.service.redis.RedisService;
 
 import java.security.Key;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -31,8 +29,8 @@ public class JwtService {
     @Autowired
     private RedisService redisService;
 
-    public String generateAccessToken(String username, Collection<? extends GrantedAuthority> authorities) {
-        String token = generateToken(username, authorities, accessTokenExpiration);
+    public String generateAccessToken(String username) {
+        String token = generateToken(username, accessTokenExpiration);
 
         String key = "jwt:access:" + username;
         redisService.set(key, token, accessTokenExpiration / 1000);
@@ -41,7 +39,7 @@ public class JwtService {
     }
 
     public String generateRefreshToken(String username) {
-        String refreshToken = generateToken(username, Collections.emptyList(), refreshTokenExpiration);
+        String refreshToken = generateToken(username, refreshTokenExpiration);
 
         String key = "jwt:refresh:" + username;
         redisService.set(key, refreshToken, refreshTokenExpiration / 1000);
@@ -80,24 +78,22 @@ public class JwtService {
                 .getSubject();
     }
 
-    @SuppressWarnings("unchecked")
-    public List<String> extractAuthorities(String token) {
-        return (List<String>) Jwts.parserBuilder()
+    public long getTimeToExpiration(String token) {
+        Date expiration = getExpirationFromToken(token);
+        return (expiration.getTime() - System.currentTimeMillis()) / 1000;
+    }
+
+    private Date getExpirationFromToken(String token) {
+        return Jwts.parserBuilder()
                 .setSigningKey(getSignKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
-                .get("authorities");
+                .getExpiration();
     }
 
-    private String generateToken(String username, Collection<? extends GrantedAuthority> authorities, long expiration) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("authorities", authorities.stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList()));
-
+    private String generateToken(String username, long expiration) {
         return Jwts.builder()
-                .setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))

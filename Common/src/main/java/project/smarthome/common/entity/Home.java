@@ -1,17 +1,16 @@
 package project.smarthome.common.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 @Entity
 @Table(name = "HOME")
-@Getter
-@Setter
 public class Home {
 
     @Id
@@ -27,9 +26,10 @@ public class Home {
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
-    @JsonBackReference
+    @JsonBackReference("user-home")
     private User owner;
 
     @OneToMany(mappedBy = "home", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("home-floor")
     private List<Floor> floors = new ArrayList<>();
 }

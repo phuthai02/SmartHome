@@ -21,7 +21,7 @@ public class UserService extends BaseService<User, Long> {
     }
 
     public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return userRepository.findFirstByUsername(username);
     }
 
     public Boolean existsByUsername(String username) {

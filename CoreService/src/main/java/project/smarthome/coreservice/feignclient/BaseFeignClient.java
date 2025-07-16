@@ -13,7 +13,7 @@ public interface BaseFeignClient<T, ID> {
     List<T> findAll();
 
     @PostMapping
-    T save(@RequestBody T entity);
+    T create(@RequestBody T entity);
 
     @PutMapping("/{id}")
     T update(@PathVariable("id") ID id, @RequestBody T entity);

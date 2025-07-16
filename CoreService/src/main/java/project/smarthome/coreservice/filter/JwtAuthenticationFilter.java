@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import project.smarthome.common.utils.Constants;
 import project.smarthome.coreservice.service.jwt.JwtService;
 import project.smarthome.coreservice.service.user.UserDetailsSecurityService;
 
@@ -78,12 +79,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (path.startsWith("/smarthome-core")) {
             path = path.substring("/smarthome-core".length());
         }
-        return path.startsWith("/auth/");
+        return path.startsWith("/pub/");
     }
 
     private String extractAccessTokenFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) return bearerToken.substring(7);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(Constants.JWT_BEARER)) return bearerToken.substring(7);
         return null;
     }
 

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "RedisFeignClient", url = "${dataservice.service.url}/redis")
+@FeignClient(name = "RedisFeignClient", url = "${data.service.url}/redis")
 public interface RedisFeignClient {
 
     @PostMapping("/set")

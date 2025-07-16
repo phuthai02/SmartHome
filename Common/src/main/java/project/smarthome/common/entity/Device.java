@@ -1,7 +1,7 @@
 package project.smarthome.common.entity;
 
-import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
@@ -19,7 +19,7 @@ public class Device {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TYPE")
-    @JsonBackReference
+    @JsonBackReference("type-device")
     private DeviceType type;
 
     @Column(name = "STATUS")
@@ -27,6 +27,6 @@ public class Device {
 
     @ManyToOne
     @JoinColumn(name = "AREA_ID")
-    @JsonBackReference
+    @JsonBackReference("area-device")
     private Area area;
 }

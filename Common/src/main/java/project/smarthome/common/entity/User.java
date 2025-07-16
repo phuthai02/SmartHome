@@ -36,6 +36,6 @@ public class User {
     private String status;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference("user-home")
     private List<Home> homes = new ArrayList<>();
 }

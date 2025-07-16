@@ -2,11 +2,13 @@ package project.smarthome.dataservice.controller.user;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import project.smarthome.common.entity.User;
 import project.smarthome.dataservice.controller.BaseController;
 import project.smarthome.dataservice.service.BaseService;
@@ -31,8 +33,7 @@ public class UserController extends BaseController<User, Long> {
     }
 
     @GetMapping("/find-by-username")
-    public ResponseEntity<User> findById(@RequestParam("username") String username) {
-        log.info("{} GET {} BY USERNAME: {}", getLogPrefix(), getEntityName().toUpperCase(), username);
+    public ResponseEntity<User> findByUsername(@RequestParam("username") String username) {
         return userService.findByUsername(username)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

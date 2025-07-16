@@ -1,8 +1,8 @@
 package project.smarthome.common.entity;
 
-import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -23,10 +23,10 @@ public class Floor {
 
     @ManyToOne
     @JoinColumn(name = "HOME_ID")
-    @JsonBackReference
+    @JsonBackReference("home-floor")
     private Home home;
 
     @OneToMany(mappedBy = "floor", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference("floor-area")
     private List<Area> areas = new ArrayList<>();
 }

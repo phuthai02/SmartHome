@@ -6,9 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import project.smarthome.common.entity.User;
 import project.smarthome.coreservice.feignclient.BaseFeignClient;
 
-import java.util.Optional;
-
-@FeignClient(name = "UserFeignClient", url = "${dataservice.service.url}/user")
+@FeignClient(name = "UserFeignClient", url = "${data.service.url}/user")
 public interface UserFeignClient extends BaseFeignClient<User, Long> {
 
     @GetMapping("/find-by-username")

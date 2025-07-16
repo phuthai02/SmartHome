@@ -8,4 +8,6 @@ public class Constants {
 
     public static final String STATUS_LOCKED = "LOCKED";
     public static final String STATUS_ACTIVE = "ACTIVE";
+
+    public static final String JWT_BEARER = "Bearer";
 }
