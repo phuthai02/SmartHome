@@ -1,8 +1,5 @@
 package project.smarthome.coreservice.filter;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,35 +39,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                     UserDetails userDetails = userDetailsSecurityService.loadUserByUsername(username);
                     if (jwtService.isAccessTokenValid(token, userDetails.getUsername())) {
-                        UsernamePasswordAuthenticationToken authentication =
-                                new UsernamePasswordAuthenticationToken(
-                                        userDetails,
-                                        null,
-                                        userDetails.getAuthorities()
-                                );
+                        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     } else {
                         log.info("Invalid token for user: {}", username);
-                        sendError(response, "Invalid token", HttpServletResponse.SC_UNAUTHORIZED);
+                        sendError(response, "Invalid token");
                         return;
                     }
                 }
+            } else {
+                log.info("Missing token in request");
+                sendError(response, "Missing token");
+                return;
             }
-        } catch (ExpiredJwtException e) {
-            log.info("JWT token expired: {}", e.getMessage());
-            sendError(response, "Token expired", HttpServletResponse.SC_UNAUTHORIZED);
-            return;
-        } catch (MalformedJwtException e) {
-            log.info("Invalid JWT token: {}", e.getMessage());
-            sendError(response, "Invalid token format", HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        } catch (SignatureException e) {
-            log.info("JWT signature validation failed: {}", e.getMessage());
-            sendError(response, "Invalid token signature", HttpServletResponse.SC_UNAUTHORIZED);
-            return;
         } catch (Exception e) {
             log.info("JWT authentication error: {}", e.getMessage());
-            sendError(response, "Authentication failed", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            sendError(response, "Authentication failed");
             return;
         }
 
@@ -92,8 +76,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return null;
     }
 
-    private void sendError(HttpServletResponse response, String message, int statusCode) throws IOException {
-        response.setStatus(statusCode);
+    private void sendError(HttpServletResponse response, String message) throws IOException {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         String error = JsonUtils.toJson(ResponseAPI.error(message));

@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng nhập - VHome+</title>
-    <link rel="stylesheet" href="/css/login.css">
+    <base href="/smarthome-admin/">
+    <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
 <div class="login-container">
@@ -18,8 +19,8 @@
     <div class="form-section">
         <form id="loginForm">
             <div class="form-group">
-                <label class="form-label" for="email">Email</label>
-                <input type="email" id="email" class="form-input" placeholder="Nhập email của bạn" required>
+                <label class="form-label" for="username">Tên đăng nhập</label>
+                <input type="text" id="username" class="form-input" placeholder="Nhập tên đăng nhập" required>
             </div>
 
             <div class="form-group">
@@ -80,19 +81,31 @@
 
     document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        const email = document.getElementById('email').value;
+        const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
 
-        if (email && password) {
+        if (username && password) {
             const button = document.querySelector('.login-button');
             button.textContent = 'Đang đăng nhập...';
             button.disabled = true;
 
-            setTimeout(() => {
-                alert('Đăng nhập thành công! (Demo)');
-                button.textContent = 'Đăng nhập';
-                button.disabled = false;
-            }, 2000);
+            fetch('/smarthome-admin/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            })
+                .then(res => {
+                    if (res.redirected) {
+                        window.location.href = res.url;
+                    } else {
+                        alert("Đăng nhập thất bại");
+                    }
+                })
         }
     });
 

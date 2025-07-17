@@ -25,4 +25,14 @@ public class JsonUtils {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public static <T> T cast(Object data, Class<T> targetClass) {
+        if (data == null) return null;
+
+        if (targetClass.isInstance(data)) {
+            return (T) data;
+        }
+
+        return mapper.convertValue(data, targetClass);
+    }
 }

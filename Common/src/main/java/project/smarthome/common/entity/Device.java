@@ -22,6 +22,15 @@ public class Device {
     @JsonBackReference("type-device")
     private DeviceType type;
 
+    @Column(name = "TOPIC_COMMAND")
+    private String topicCommand;
+
+    @Column(name = "TOPIC_CONTENT")
+    private String topicContent;
+
+    @Column(name = "TOPIC_ALERT")
+    private String topicAlert;
+
     @Column(name = "STATUS")
     private String status;
 
