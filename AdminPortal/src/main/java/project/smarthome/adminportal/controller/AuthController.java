@@ -5,10 +5,8 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 import project.smarthome.adminportal.config.core.CoreServiceConfig;
 import project.smarthome.adminportal.http.HTTPRequest;
 import project.smarthome.common.dto.request.AuthRequest;
@@ -18,13 +16,18 @@ import project.smarthome.common.utils.Constants;
 import project.smarthome.common.utils.JsonUtils;
 
 @Slf4j
-@RestController
+@Controller
 @RequestMapping("auth")
 public class AuthController {
 
     @PostMapping("/login")
-    public void login(@RequestBody AuthRequest request, HttpServletRequest httpRequest) {
+    public String login(@RequestParam("username") String username,
+                        @RequestParam("password") String password,
+                        HttpServletRequest httpRequest) {
         try {
+            AuthRequest request = new AuthRequest();
+            request.setUsername(username);
+            request.setPassword(password);
             HTTPRequest<ResponseAPI> httpRequestHelper = new HTTPRequest<>(ResponseAPI.class);
             ResponseEntity<ResponseAPI> response = httpRequestHelper.connect(
                     CoreServiceConfig.getCoreServiceUrlPublic() + "/auth/login",
@@ -38,41 +41,38 @@ public class AuthController {
                 AuthResponse authResponse = JsonUtils.cast(response.getBody().getData(), AuthResponse.class);
                 httpRequest.getSession().setAttribute(Constants.ACCESS_TOKEN, authResponse.getTokenType() + authResponse.getAccessToken());
                 httpRequest.getSession().setAttribute(Constants.REFRESH_TOKEN, authResponse.getRefreshToken());
+                return "redirect:/dashboard";
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
+        return "redirect:/login?error=401";
     }
 
     @PostMapping("/logout")
-    public String logout(HttpServletRequest httpRequest) {
-        try {
-            HttpSession session = httpRequest.getSession();
+    public String logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
             String accessToken = (String) session.getAttribute(Constants.ACCESS_TOKEN);
 
             if (accessToken != null) {
-                HTTPRequest<ResponseAPI> httpRequestHelper = new HTTPRequest<>(ResponseAPI.class);
-                ResponseEntity<ResponseAPI> response = httpRequestHelper.connect(
-                        CoreServiceConfig.getCoreServiceUrlPublic() + "/auth/logout",
-                        null,
-                        HttpMethod.POST,
-                        null,
-                        null
-                );
+                try {
+                    new HTTPRequest<>(ResponseAPI.class).connect(
+                            CoreServiceConfig.getCoreServiceUrlPublic() + "/auth/logout",
+                            null,
+                            HttpMethod.POST,
+                            null,
+                            null
+                    );
+                } catch (Exception e) {
+                    log.error("Error during logout request", e);
+                }
             }
 
             session.removeAttribute(Constants.ACCESS_TOKEN);
             session.removeAttribute(Constants.REFRESH_TOKEN);
             session.invalidate();
-
-            return "redirect:/login?logout=true";
-        } catch (Exception e) {
-            log.error("Error during logout", e);
-            HttpSession session = httpRequest.getSession();
-            session.removeAttribute(Constants.ACCESS_TOKEN);
-            session.removeAttribute(Constants.REFRESH_TOKEN);
-            session.invalidate();
-            return "redirect:/login?logout=true";
         }
+        return "redirect:/login?logout=true";
     }
 }

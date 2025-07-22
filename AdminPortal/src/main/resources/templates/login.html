@@ -17,17 +17,19 @@
     </div>
 
     <div class="form-section">
-        <form id="loginForm">
+        <form id="loginForm" method="POST" action="auth/login">
             <div class="form-group">
                 <label class="form-label" for="username">Tên đăng nhập</label>
-                <input type="text" id="username" class="form-input" placeholder="Nhập tên đăng nhập" required>
+                <input type="text" id="username" name="username" class="form-input" placeholder="Nhập tên đăng nhập"
+                       required>
             </div>
 
             <div class="form-group">
                 <label class="form-label" for="password">Mật khẩu</label>
                 <div style="position: relative;">
-                    <input type="password" id="password" class="form-input" placeholder="Nhập mật khẩu" required>
-                    <button type="button" class="password-toggle" onclick="togglePassword()">🙊</button>
+                    <input type="password" id="password" name="password" class="form-input" placeholder="Nhập mật khẩu"
+                           required>
+                    <button type="button" class="password-toggle" onclick="togglePassword()">🙈</button>
                 </div>
             </div>
 
@@ -55,7 +57,20 @@
     </div>
 </div>
 
+<script src="js/main.js"></script>
 <script>
+    function handleAuthMessages() {
+        const urlParams = new URLSearchParams(window.location.search);
+
+        if (urlParams.get('error') === '401') {
+            showNotification('error', 'Đăng nhập thất bại', 'Sai tên đăng nhập hoặc mật khẩu');
+        } else if (urlParams.get('logout') === 'true') {
+            showNotification('success', 'Đăng xuất thành công', 'Bạn đã đăng xuất khỏi hệ thống');
+        } else if (urlParams.get('error') === '403') {
+            showNotification('warning', 'Phiên hết hạn', 'Phiên đăng nhập của bạn đã hết hạn');
+        }
+    }
+
     function toggleCheckbox() {
         const checkbox = document.getElementById('remember');
         checkbox.checked = !checkbox.checked;
@@ -67,55 +82,29 @@
 
         if (passwordInput.type === 'password') {
             passwordInput.type = 'text';
-            toggleBtn.textContent = '🙈';
+            toggleBtn.textContent = `🙊`;
         } else {
             passwordInput.type = 'password';
-            toggleBtn.textContent = '🙊';
+            toggleBtn.textContent = '🙈';
         }
     }
 
-    document.querySelector('.remember-me label').addEventListener('click', function(e) {
-        e.preventDefault();
-        toggleCheckbox();
-    });
+    document.addEventListener('DOMContentLoaded', function() {
+        handleAuthMessages();
 
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-
-        if (username && password) {
-            const button = document.querySelector('.login-button');
-            button.textContent = 'Đang đăng nhập...';
-            button.disabled = true;
-
-            fetch('/smarthome-admin/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    username: username,
-                    password: password
-                })
-            })
-                .then(res => {
-                    if (res.redirected) {
-                        window.location.href = res.url;
-                    } else {
-                        alert("Đăng nhập thất bại");
-                    }
-                })
-        }
-    });
-
-    document.querySelectorAll('.form-input').forEach(input => {
-        input.addEventListener('focus', function() {
-            this.parentElement.style.transform = 'scale(1.02)';
+        document.querySelector('.remember-me label').addEventListener('click', function(e) {
+            e.preventDefault();
+            toggleCheckbox();
         });
 
-        input.addEventListener('blur', function() {
-            this.parentElement.style.transform = 'scale(1)';
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
         });
     });
 </script>

@@ -15,6 +15,7 @@ import project.smarthome.common.dto.request.AuthRequest;
 import project.smarthome.common.dto.response.AuthResponse;
 import project.smarthome.common.dto.response.ResponseAPI;
 import project.smarthome.common.utils.Constants;
+import project.smarthome.common.utils.JsonUtils;
 import project.smarthome.coreservice.service.jwt.JwtService;
 import project.smarthome.coreservice.service.user.UserDetailsSecurityService;
 
@@ -32,8 +33,11 @@ public class AuthController {
     @Autowired
     private UserDetailsSecurityService userDetailsSecurityService;
 
+    private final String prefixLogin = "[AUTH]";
+
     @PostMapping("/login")
     public ResponseEntity<ResponseAPI> login(@RequestBody AuthRequest request) {
+        log.info("{} Login request: {}", prefixLogin, JsonUtils.toJson(request));
         try {
             Authentication auth = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
@@ -59,8 +63,52 @@ public class AuthController {
         }
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<ResponseAPI> logout(@RequestHeader("Authorization") String authHeader) {
+        log.info("{} Logout request: {}", prefixLogin, authHeader);
+        try {
+            if (authHeader == null || !authHeader.startsWith(Constants.JWT_BEARER)) {
+                return ResponseEntity.badRequest().body(ResponseAPI.error("Invalid header"));
+            }
+
+            String token = authHeader.substring(7);
+            String username = jwtService.extractUsername(token);
+
+            if (username != null) {
+                jwtService.revokeAccessToken(username);
+                jwtService.revokeRefreshToken(username);
+            }
+
+            return ResponseEntity.ok(ResponseAPI.success("Logout successful"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseAPI.error(e.getMessage()));
+        }
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<ResponseAPI> validateToken(@RequestHeader("Authorization") String authHeader) {
+        log.info("{} Validate request: {}", prefixLogin, authHeader);
+        try {
+            if (authHeader == null || !authHeader.startsWith(Constants.JWT_BEARER)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseAPI.error("Invalid header"));
+            }
+
+            String token = authHeader.substring(7);
+            String username = jwtService.extractUsername(token);
+
+            if (username != null && jwtService.isAccessTokenValid(token, username)) {
+                return ResponseEntity.ok(ResponseAPI.success("Token valid"));
+            }
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseAPI.error("Invalid token"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseAPI.error(e.getMessage()));
+        }
+    }
+
     @PostMapping("/refresh")
     public ResponseEntity<ResponseAPI> refreshToken(@RequestBody AuthRequest request) {
+        log.info("{} Refresh request: {}", prefixLogin, request);
         try {
             String refreshToken = request.getRefreshToken();
             String username = jwtService.extractUsername(refreshToken);
@@ -83,47 +131,6 @@ public class AuthController {
             return ResponseEntity.ok(ResponseAPI.success(response));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseAPI.error(e.getMessage()));
-        }
-    }
-
-    @PostMapping("/logout")
-    public ResponseEntity<ResponseAPI> logout(@RequestHeader("Authorization") String authHeader) {
-        try {
-            if (authHeader == null || !authHeader.startsWith(Constants.JWT_BEARER)) {
-                return ResponseEntity.badRequest().body(ResponseAPI.error("Invalid header"));
-            }
-
-            String token = authHeader.substring(7);
-            String username = jwtService.extractUsername(token);
-
-            if (username != null) {
-                jwtService.revokeAccessToken(username);
-                jwtService.revokeRefreshToken(username);
-            }
-
-            return ResponseEntity.ok(ResponseAPI.success("Logout successful"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseAPI.error(e.getMessage()));
-        }
-    }
-
-    @GetMapping("/validate")
-    public ResponseEntity<ResponseAPI> validateToken(@RequestHeader("Authorization") String authHeader) {
-        try {
-            if (authHeader == null || !authHeader.startsWith(Constants.JWT_BEARER)) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseAPI.error("Invalid header"));
-            }
-
-            String token = authHeader.substring(7);
-            String username = jwtService.extractUsername(token);
-
-            if (username != null && jwtService.isAccessTokenValid(token, username)) {
-                return ResponseEntity.ok(ResponseAPI.success("Token valid"));
-            }
-
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseAPI.error("Invalid token"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseAPI.error(e.getMessage()));
         }
     }
 }
