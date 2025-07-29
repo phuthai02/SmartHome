@@ -13,28 +13,33 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import project.smarthome.common.dto.request.FilterRequest;
 import project.smarthome.common.dto.response.PageFilterResponse;
 import project.smarthome.common.utils.Constants;
+import project.smarthome.dataservice.service.BaseService;
 
 import java.util.*;
 
 @Slf4j
-public abstract class BaseMySQLService<T, ID> {
+public abstract class BaseMySQLService<T, ID> implements BaseService<T, ID> {
 
     protected abstract JpaRepository<T, ID> getRepository();
 
     protected abstract JpaSpecificationExecutor<T> getSpecificationExecutor();
 
+    @Override
     public Optional<T> findById(ID id) {
         return getRepository().findById(id);
     }
 
+    @Override
     public List<T> findAll() {
         return getRepository().findAll();
     }
 
+    @Override
     public T save(T entity) {
         return getRepository().save(entity);
     }
 
+    @Override
     public T update(ID id, T entity) {
         if (!getRepository().existsById(id)) {
             throw new RuntimeException("Entity with ID " + id + " not found");
@@ -42,10 +47,12 @@ public abstract class BaseMySQLService<T, ID> {
         return getRepository().save(entity);
     }
 
+    @Override
     public void deleteById(ID id) {
         getRepository().deleteById(id);
     }
 
+    @Override
     public PageFilterResponse<T> findByPageFilter(List<FilterRequest> filters, Pageable pageable) {
         Specification<T> spec = (root, query, cb) -> {
             List<Predicate> predicates = filters.stream()

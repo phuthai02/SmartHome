@@ -1,4 +1,4 @@
-package project.smarthome.dataservice.controller.user;
+package project.smarthome.dataservice.controller.mysql.user;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import project.smarthome.common.entity.mysql.User;
 import project.smarthome.dataservice.controller.BaseController;
-import project.smarthome.dataservice.service.mysql.BaseMySQLService;
+import project.smarthome.dataservice.service.BaseService;
 import project.smarthome.dataservice.service.mysql.user.UserService;
 
 @Slf4j
@@ -21,7 +21,7 @@ public class UserController extends BaseController<User, Long> {
     private UserService userService;
 
     @Override
-    protected BaseMySQLService<User, Long> getBaseService() {
+    protected BaseService<User, Long> getBaseService() {
         return userService;
     }
 

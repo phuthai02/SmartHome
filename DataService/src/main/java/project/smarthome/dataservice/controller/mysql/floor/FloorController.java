@@ -1,11 +1,11 @@
-package project.smarthome.dataservice.controller.floor;
+package project.smarthome.dataservice.controller.mysql.floor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.smarthome.common.entity.mysql.Floor;
 import project.smarthome.dataservice.controller.BaseController;
-import project.smarthome.dataservice.service.mysql.BaseMySQLService;
+import project.smarthome.dataservice.service.BaseService;
 import project.smarthome.dataservice.service.mysql.floor.FloorService;
 
 @RestController
@@ -16,7 +16,7 @@ public class FloorController extends BaseController<Floor, Long> {
     private FloorService floorService;
 
     @Override
-    protected BaseMySQLService<Floor, Long> getBaseService() {
+    protected BaseService<Floor, Long> getBaseService() {
         return floorService;
     }
 

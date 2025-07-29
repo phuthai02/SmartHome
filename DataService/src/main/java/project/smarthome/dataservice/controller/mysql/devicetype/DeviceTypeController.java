@@ -1,11 +1,11 @@
-package project.smarthome.dataservice.controller.devicetype;
+package project.smarthome.dataservice.controller.mysql.devicetype;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import project.smarthome.common.entity.mysql.DeviceType;
 import project.smarthome.dataservice.controller.BaseController;
-import project.smarthome.dataservice.service.mysql.BaseMySQLService;
+import project.smarthome.dataservice.service.BaseService;
 import project.smarthome.dataservice.service.mysql.devicetype.DeviceTypeService;
 
 @RestController
@@ -16,7 +16,7 @@ public class DeviceTypeController extends BaseController<DeviceType, Long> {
     private DeviceTypeService deviceTypeService;
 
     @Override
-    protected BaseMySQLService<DeviceType, Long> getBaseService() {
+    protected BaseService<DeviceType, Long> getBaseService() {
         return deviceTypeService;
     }
 

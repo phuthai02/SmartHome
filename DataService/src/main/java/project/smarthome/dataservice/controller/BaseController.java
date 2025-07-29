@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.*;
 import project.smarthome.common.dto.request.PageFilterRequest;
 import project.smarthome.common.dto.response.PageFilterResponse;
 import project.smarthome.common.utils.JsonUtils;
-import project.smarthome.dataservice.service.mysql.BaseMySQLService;
+import project.smarthome.dataservice.service.BaseService;
 
 import java.util.List;
 
 @Slf4j
 public abstract class BaseController<T, ID> {
 
-    protected abstract BaseMySQLService<T, ID> getBaseService();
+    protected abstract BaseService<T, ID> getBaseService();
 
     protected abstract String getEntityName();
 

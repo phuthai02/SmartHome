@@ -12,11 +12,15 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import project.smarthome.common.dto.request.FilterRequest;
 import project.smarthome.common.dto.response.PageFilterResponse;
 import project.smarthome.common.utils.Constants;
+import project.smarthome.dataservice.service.BaseService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
-public abstract class BaseMongoDBService<T, ID> {
+public abstract class BaseMongoDBService<T, ID> implements BaseService<T, ID> {
 
     @Autowired
     protected MongoTemplate mongoTemplate;
@@ -25,22 +29,36 @@ public abstract class BaseMongoDBService<T, ID> {
 
     protected abstract Class<T> getEntityClass();
 
+    @Override
     public Optional<T> findById(ID id) {
         return getRepository().findById(id);
     }
 
+    @Override
     public List<T> findAll() {
         return getRepository().findAll();
     }
 
+    @Override
     public T save(T entity) {
         return getRepository().save(entity);
     }
 
+    @Override
+    public T update(ID id, T entity) {
+        Optional<T> existing = findById(id);
+        if (existing.isEmpty()) {
+            throw new RuntimeException("Entity with ID " + id + " not found");
+        }
+        return save(entity);
+    }
+
+    @Override
     public void deleteById(ID id) {
         getRepository().deleteById(id);
     }
 
+    @Override
     public PageFilterResponse<T> findByPageFilter(List<FilterRequest> filters, Pageable pageable) {
         Criteria criteria = buildCriteria(filters);
         Query query = new Query(criteria).with(pageable);
