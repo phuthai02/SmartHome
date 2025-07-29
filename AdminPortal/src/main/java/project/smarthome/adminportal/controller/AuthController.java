@@ -28,6 +28,7 @@ public class AuthController {
             AuthRequest request = new AuthRequest();
             request.setUsername(username);
             request.setPassword(password);
+            request.setClientType(Constants.ClientType.ADMIN);
             HTTPRequest<ResponseAPI> httpRequestHelper = new HTTPRequest<>(ResponseAPI.class);
             ResponseEntity<ResponseAPI> response = httpRequestHelper.connect(
                     CoreServiceConfig.getCoreServiceUrlPublic() + "/auth/login",
@@ -36,7 +37,6 @@ public class AuthController {
                     null,
                     request
             );
-
             if (response != null && response.getStatusCode().is2xxSuccessful()) {
                 AuthResponse authResponse = JsonUtils.cast(response.getBody().getData(), AuthResponse.class);
                 httpRequest.getSession().setAttribute(Constants.ACCESS_TOKEN, authResponse.getTokenType() + authResponse.getAccessToken());

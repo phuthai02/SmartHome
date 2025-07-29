@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -35,6 +37,14 @@ public class RedisService {
             return redisTemplate.opsForValue().get(key);
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    public Set<String> keys(String pattern) {
+        try {
+            return redisTemplate.keys(pattern);
+        } catch (Exception e) {
+            return Collections.emptySet();
         }
     }
 

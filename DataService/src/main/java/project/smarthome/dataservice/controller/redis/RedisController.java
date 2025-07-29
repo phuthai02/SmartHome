@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.smarthome.dataservice.service.redis.RedisService;
 
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -34,20 +35,21 @@ public class RedisController {
 
     @GetMapping("/get")
     public ResponseEntity<String> get(@RequestParam String key) {
-        log.info("[REDIS] GET KEY={}", key);
-
+        log.info("[REDIS] GET BY KEY={}", key);
         String value = redisService.get(key);
-        if (value != null) {
-            return ResponseEntity.ok(value);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(value);
+    }
+
+    @GetMapping("/keys")
+    public ResponseEntity<Set<String>> keys(@RequestParam String pattern) {
+        log.info("[REDIS] GET KEYS PATTERN={}", pattern);
+        Set<String> keys = redisService.keys(pattern);
+        return ResponseEntity.ok(keys);
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<Boolean> delete(@RequestParam String key) {
         log.info("[REDIS] DELETE KEY={}", key);
-
         boolean result = redisService.delete(key);
         return ResponseEntity.ok(result);
     }
@@ -55,7 +57,6 @@ public class RedisController {
     @GetMapping("/exists")
     public ResponseEntity<Boolean> exists(@RequestParam String key) {
         log.info("[REDIS] EXISTS KEY={}", key);
-
         boolean exists = redisService.exists(key);
         return ResponseEntity.ok(exists);
     }
@@ -64,7 +65,6 @@ public class RedisController {
     public ResponseEntity<Boolean> expire(@RequestParam String key,
                                           @RequestParam Long timeoutInSeconds) {
         log.info("[REDIS] EXPIRE KEY={}, TIMEOUT={}", key, timeoutInSeconds);
-
         boolean result = redisService.expire(key, timeoutInSeconds, TimeUnit.SECONDS);
         return ResponseEntity.ok(result);
     }
@@ -72,7 +72,6 @@ public class RedisController {
     @GetMapping("/ttl")
     public ResponseEntity<Long> getTtl(@RequestParam String key) {
         log.info("[REDIS] TTL KEY={}", key);
-
         Long ttl = redisService.getExpire(key);
         return ResponseEntity.ok(ttl);
     }

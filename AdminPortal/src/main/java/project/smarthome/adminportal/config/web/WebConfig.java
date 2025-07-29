@@ -21,7 +21,8 @@ public class WebConfig implements WebMvcConfigurer {
                         "/js/**",
                         "/images/**",
                         "/icons/**",
-                        "/auth/**"
+                        "/auth/**",
+                        "/notify/**"
                 );
     }
 }

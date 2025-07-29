@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import project.smarthome.common.entity.User;
+import project.smarthome.common.entity.mysql.User;
 import project.smarthome.common.utils.Constants;
 
 import java.util.Collection;
@@ -37,7 +37,7 @@ public class UserDetailsSecurity implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return !Constants.STATUS_LOCKED.equalsIgnoreCase(user.getStatus());
+        return !Constants.Status.LOCKED.equalsIgnoreCase(user.getStatus());
     }
 
     @Override
@@ -47,6 +47,6 @@ public class UserDetailsSecurity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return Constants.STATUS_ACTIVE.equalsIgnoreCase(user.getStatus());
+        return Constants.Status.ACTIVE.equalsIgnoreCase(user.getStatus());
     }
 }

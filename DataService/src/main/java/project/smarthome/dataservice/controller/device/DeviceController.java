@@ -3,10 +3,10 @@ package project.smarthome.dataservice.controller.device;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import project.smarthome.common.entity.Device;
+import project.smarthome.common.entity.mysql.Device;
 import project.smarthome.dataservice.controller.BaseController;
-import project.smarthome.dataservice.service.BaseService;
-import project.smarthome.dataservice.service.device.DeviceService;
+import project.smarthome.dataservice.service.mysql.BaseMySQLService;
+import project.smarthome.dataservice.service.mysql.device.DeviceService;
 
 @RestController
 @RequestMapping("device")
@@ -16,7 +16,7 @@ public class DeviceController extends BaseController<Device, Long> {
     private DeviceService deviceService;
 
     @Override
-    protected BaseService<Device, Long> getBaseService() {
+    protected BaseMySQLService<Device, Long> getBaseService() {
         return deviceService;
     }
 

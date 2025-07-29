@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import project.smarthome.common.entity.User;
+import project.smarthome.common.entity.mysql.User;
 import project.smarthome.coreservice.feignclient.user.UserFeignClient;
 import project.smarthome.coreservice.model.UserDetailsSecurity;
 

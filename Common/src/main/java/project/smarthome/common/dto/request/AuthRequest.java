@@ -12,4 +12,5 @@ public class AuthRequest {
     private String password;
     private String refreshToken;
     private String accessToken;
+    private String clientType;
 }

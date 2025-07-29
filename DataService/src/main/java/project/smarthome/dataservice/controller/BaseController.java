@@ -1,16 +1,22 @@
 package project.smarthome.dataservice.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import project.smarthome.dataservice.service.BaseService;
+import project.smarthome.common.dto.request.PageFilterRequest;
+import project.smarthome.common.dto.response.PageFilterResponse;
+import project.smarthome.common.utils.JsonUtils;
+import project.smarthome.dataservice.service.mysql.BaseMySQLService;
 
 import java.util.List;
 
 @Slf4j
 public abstract class BaseController<T, ID> {
 
-    protected abstract BaseService<T, ID> getBaseService();
+    protected abstract BaseMySQLService<T, ID> getBaseService();
 
     protected abstract String getEntityName();
 
@@ -54,5 +60,19 @@ public abstract class BaseController<T, ID> {
         log.info("{} DELETE {} BY ID: {}", getLogPrefix(), getEntityName().toUpperCase(), id);
         getBaseService().deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/page-filter")
+    public ResponseEntity<PageFilterResponse<T>> findByPageFilter(@RequestBody PageFilterRequest request) {
+        log.info("{} GET {} BY PAGE: page={}, size={}, sortField={}, sortDir={}, filters={}",
+                getLogPrefix(), getEntityName().toUpperCase(),
+                request.getPage(), request.getSize(),
+                request.getSortField(), request.getSortDir(),
+                JsonUtils.toJson(request.getFilters())
+        );
+        Sort sort = Sort.by(Sort.Direction.fromString(request.getSortDir()), request.getSortField());
+        Pageable pageable = PageRequest.of(request.getPage(), request.getSize(), sort);
+        PageFilterResponse<T> result = getBaseService().findByPageFilter(request.getFilters(), pageable);
+        return ResponseEntity.ok(result);
     }
 }

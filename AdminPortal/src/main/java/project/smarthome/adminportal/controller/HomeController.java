@@ -1,8 +1,11 @@
 package project.smarthome.adminportal.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -10,22 +13,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping()
 public class HomeController {
 
-    @GetMapping("dashboard")
-    public String dashboard() {
-        return "dashboard";
+    @Autowired
+    private ResourceLoader resourceLoader;
+
+    @GetMapping("{page}")
+    public String view(@PathVariable String page) {
+        Resource resource = resourceLoader.getResource("classpath:/templates/contents/" + page + ".html");
+        if (!resource.exists()) page = "404";
+        return "contents/" + page;
     }
 
     @GetMapping("login")
-    public String login(@RequestParam(required = false) Integer error,
-                        @RequestParam(required = false) Boolean logout,
-                        Model model) {
-        model.addAttribute("error", error);
-        model.addAttribute("logout", logout);
+    public String login(@RequestParam(required = false) Integer error, @RequestParam(required = false) Boolean logout) {
         return "login";
-    }
-
-    @GetMapping("user")
-    public String user() {
-        return "user";
     }
 }

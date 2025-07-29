@@ -28,7 +28,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String requestURI = request.getRequestURI();
-
+        System.out.println(requestURI);
         if (requestURI.equals("/smarthome-admin/login")) {
             HttpSession session = request.getSession(false);
             String accessToken = session != null ? (String) session.getAttribute(Constants.ACCESS_TOKEN) : null;

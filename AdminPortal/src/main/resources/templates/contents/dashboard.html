@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="topbar">
+        <div class="topbar-content">
+            <div class="topbar-left">
+                <h1>Dashboard</h1>
+                <div class="breadcrumb">
+                    <span>Trang chủ</span>
+                    <span>›</span>
+                    <span>Dashboard</span>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <button class="notification-btn">
+                    <img src="icons/bell.svg" alt="Thông báo" />
+                    <div class="notification-badge"></div>
+                </button>
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <img src="icons/menu.svg" alt="Menu" />
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-content">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-body">
+                    <div class="stat-icon">
+                        <img src="icons/user-connect.svg" alt="Người dùng hoạt động" />
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value">1,234</div>
+                        <div class="stat-label">Người dùng hoạt động</div>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-body">
+                    <div class="stat-icon">
+                        <img src="icons/device-connect.svg" alt="Thiết bị kết nối" />
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value">567</div>
+                        <div class="stat-label">Thiết bị kết nối</div>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-body">
+                    <div class="stat-icon">
+                        <img src="icons/performan.svg" alt="Hiệu suất hệ thống" />
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value">89%</div>
+                        <div class="stat-label">Hiệu suất hệ thống</div>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-body">
+                    <div class="stat-icon">
+                        <img src="icons/control.svg" alt="Lệnh thực thi" />
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value">12.5k</div>
+                        <div class="stat-label">Lệnh thực thi</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="content-grid">
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title">Biểu đồ sử dụng thiết bị</h2>
+                </div>
+                <div class="chart-placeholder">
+                    📈 Biểu đồ sẽ được hiển thị ở đây
+                </div>
+            </div>
+
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="card-title">Hoạt động gần đây</h2>
+                </div>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="activity-icon"><img src="icons/device-version.svg" alt="Cập nhật firmware thiết bị" /></div>
+                        <div class="activity-text">
+                            <div class="activity-title">Cập nhật firmware thiết bị</div>
+                            <div class="activity-time">2 phút trước</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon"><img src="icons/user-add.svg" alt="Người dùng mới đăng ký" /></div>
+                        <div class="activity-text">
+                            <div class="activity-title">Người dùng mới đăng ký</div>
+                            <div class="activity-time">5 phút trước</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon"><img src="icons/warning.svg" alt="Cảnh báo bảo mật" /></div>
+                        <div class="activity-text">
+                            <div class="activity-title">Cảnh báo bảo mật</div>
+                            <div class="activity-time">10 phút trước</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon"><img src="icons/backup.svg" alt="Sao lưu dữ liệu" /></div>
+                        <div class="activity-text">
+                            <div class="activity-title">Sao lưu dữ liệu hoàn tất</div>
+                            <div class="activity-time">30 phút trước</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-body">
+                    <div class="stat-icon">
+                        <img src="icons/user-connect.svg" alt="Người dùng hoạt động" />
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value">1,234</div>
+                        <div class="stat-label">Người dùng hoạt động</div>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-body">
+                    <div class="stat-icon">
+                        <img src="icons/device-connect.svg" alt="Thiết bị kết nối" />
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value">567</div>
+                        <div class="stat-label">Thiết bị kết nối</div>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-body">
+                    <div class="stat-icon">
+                        <img src="icons/performan.svg" alt="Hiệu suất hệ thống" />
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value">89%</div>
+                        <div class="stat-label">Hiệu suất hệ thống</div>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-body">
+                    <div class="stat-icon">
+                        <img src="icons/control.svg" alt="Lệnh thực thi" />
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value">12.5k</div>
+                        <div class="stat-label">Lệnh thực thi</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script layout:fragment="scripts">
+
+</script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 package project.smarthome.coreservice.feignclient.device;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import project.smarthome.common.entity.Device;
+import project.smarthome.common.entity.mysql.Device;
 import project.smarthome.coreservice.feignclient.BaseFeignClient;
 
 @FeignClient(name = "DeviceFeignClient", url = "${data.service.url}/device")

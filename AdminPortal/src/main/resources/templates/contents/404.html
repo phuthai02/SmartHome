@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+<head>
+    <title>404 - Trang không tìm thấy</title>
+    <style>
+        .error-container {
+            padding: 36px;
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--secondary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .error-content {
+            background: white;
+            padding: 36px;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--gray-200);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
+            min-height: calc(100vh - 175px);
+        }
+
+        .error-code {
+            font-size: 72px;
+            font-weight: 900;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .error-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 56px;
+            }
+
+            .error-title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="topbar">
+        <div class="topbar-content">
+            <div class="topbar-left">
+                <h1>Trang không tìm thấy</h1>
+                <div class="breadcrumb">
+                    <span>Lỗi</span>
+                    <span>›</span>
+                    <span>Trang không tìm thấy</span>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <button class="notification-btn">
+                    <img src="icons/bell.svg" alt="Thông báo" />
+                    <div class="notification-badge"></div>
+                </button>
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <img src="icons/menu.svg" alt="Menu" />
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="error-container">
+        <div class="error-content">
+            <div class="error-code">404</div>
+            <h1 class="error-title">Trang không tìm thấy hoặc đã bị di chuyển</h1>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

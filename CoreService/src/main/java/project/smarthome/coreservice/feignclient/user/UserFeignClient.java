@@ -3,7 +3,7 @@ package project.smarthome.coreservice.feignclient.user;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import project.smarthome.common.entity.User;
+import project.smarthome.common.entity.mysql.User;
 import project.smarthome.coreservice.feignclient.BaseFeignClient;
 
 @FeignClient(name = "UserFeignClient", url = "${data.service.url}/user")

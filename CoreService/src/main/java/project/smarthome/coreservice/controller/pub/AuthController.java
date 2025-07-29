@@ -44,6 +44,12 @@ public class AuthController {
             );
             UserDetails user = (UserDetails) auth.getPrincipal();
 
+            boolean isAdminRequest = Constants.ClientType.ADMIN.equals(request.getClientType());
+            boolean isNotAdminUser = user.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals(Constants.Role.ADMIN));
+            if (isAdminRequest && isNotAdminUser) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ResponseAPI.error("User do not have permission"));
+            }
+
             String accessToken = jwtService.generateAccessToken(user.getUsername());
             String refreshToken = jwtService.generateRefreshToken(user.getUsername());
 

@@ -2,17 +2,15 @@ package project.smarthome.dataservice.controller.user;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
-import project.smarthome.common.entity.User;
+import project.smarthome.common.entity.mysql.User;
 import project.smarthome.dataservice.controller.BaseController;
-import project.smarthome.dataservice.service.BaseService;
-import project.smarthome.dataservice.service.user.UserService;
+import project.smarthome.dataservice.service.mysql.BaseMySQLService;
+import project.smarthome.dataservice.service.mysql.user.UserService;
 
 @Slf4j
 @RestController
@@ -23,7 +21,7 @@ public class UserController extends BaseController<User, Long> {
     private UserService userService;
 
     @Override
-    protected BaseService<User, Long> getBaseService() {
+    protected BaseMySQLService<User, Long> getBaseService() {
         return userService;
     }
 

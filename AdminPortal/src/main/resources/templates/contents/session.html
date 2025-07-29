@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Quản lý phiên đăng nhập</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="topbar">
+        <div class="topbar-content">
+            <div class="topbar-left">
+                <h1>Quản lý phiên đăng nhập</h1>
+                <div class="breadcrumb">
+                    <span>Tài khoản và bảo mật</span>
+                    <span>›</span>
+                    <span>Quản lý phiên đăng nhập</span>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <button class="notification-btn">
+                    <img src="icons/bell.svg" alt="Thông báo" />
+                    <div class="notification-badge"></div>
+                </button>
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <img src="icons/menu.svg" alt="Menu" />
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script layout:fragment="scripts">
+
+</script>
+</body>
+</html>

@@ -31,8 +31,8 @@ public class HTTPRequest<T> {
             return sendRequest(url, params, method, headers, body, mediaType);
         } catch (Exception e) {
             log.error("Request error: {}", e.getMessage());
-            throw new RuntimeException("Request failed", e);
         }
+        return null;
     }
 
     private ResponseEntity<T> sendRequest(String url, MultiValueMap<String, String> params, HttpMethod method, Map<String, String> headers, Object body, MediaType mediaType) {
