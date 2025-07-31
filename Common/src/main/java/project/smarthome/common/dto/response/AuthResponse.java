@@ -13,19 +13,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthResponse {
-
+    private UserInfo userInfo;
     private String accessToken;
     private String refreshToken;
-    private String username;
-    private List<String> authorities;
     private String tokenType;
     private Long expiresIn;
 
-    public AuthResponse(String accessToken, String refreshToken, String username, List<String> authorities, Long expiresIn) {
+    public AuthResponse(UserInfo userInfo, String accessToken, String refreshToken, Long expiresIn) {
+        this.userInfo = userInfo;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
-        this.username = username;
-        this.authorities = authorities;
         this.tokenType = Constants.JWT_BEARER;
         this.expiresIn = expiresIn;
     }

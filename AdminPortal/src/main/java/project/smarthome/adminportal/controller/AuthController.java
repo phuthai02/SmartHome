@@ -31,7 +31,7 @@ public class AuthController {
             request.setClientType(Constants.ClientType.ADMIN);
             HTTPRequest<ResponseAPI> httpRequestHelper = new HTTPRequest<>(ResponseAPI.class);
             ResponseEntity<ResponseAPI> response = httpRequestHelper.connect(
-                    CoreServiceConfig.getCoreServiceUrlPublic() + "/auth/login",
+                    CoreServiceConfig.getCoreApiServiceUrl() + "/auth/login",
                     null,
                     HttpMethod.POST,
                     null,
@@ -41,6 +41,7 @@ public class AuthController {
                 AuthResponse authResponse = JsonUtils.cast(response.getBody().getData(), AuthResponse.class);
                 httpRequest.getSession().setAttribute(Constants.ACCESS_TOKEN, authResponse.getTokenType() + authResponse.getAccessToken());
                 httpRequest.getSession().setAttribute(Constants.REFRESH_TOKEN, authResponse.getRefreshToken());
+                httpRequest.getSession().setAttribute(Constants.USER_INFO, authResponse.getUserInfo());
                 return "redirect:/dashboard";
             }
         } catch (Exception e) {
@@ -58,7 +59,7 @@ public class AuthController {
             if (accessToken != null) {
                 try {
                     new HTTPRequest<>(ResponseAPI.class).connect(
-                            CoreServiceConfig.getCoreServiceUrlPublic() + "/auth/logout",
+                            CoreServiceConfig.getCoreApiServiceUrl() + "/auth/logout",
                             null,
                             HttpMethod.POST,
                             null,
@@ -71,6 +72,7 @@ public class AuthController {
 
             session.removeAttribute(Constants.ACCESS_TOKEN);
             session.removeAttribute(Constants.REFRESH_TOKEN);
+            session.removeAttribute(Constants.USER_INFO);
             session.invalidate();
         }
         return "redirect:/login?logout=true";

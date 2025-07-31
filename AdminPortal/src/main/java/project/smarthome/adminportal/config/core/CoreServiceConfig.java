@@ -9,21 +9,21 @@ import org.springframework.stereotype.Component;
 public class CoreServiceConfig {
 
     @Getter
-    private static String coreServiceUrlPublic;
+    private static String coreApiServiceUrl;
 
     @Getter
-    private static String coreServiceUrlAdmin;
+    private static String coreAdminServiceUrl;
 
     @Getter
-    private static String coreServiceUrlCustomer;
+    private static String coreCustomerServiceUrl;
 
     @Value("${core.service.url}")
     private String baseUrl;
 
     @PostConstruct
     public void init() {
-        coreServiceUrlPublic = baseUrl + "/pub";
-        coreServiceUrlAdmin = baseUrl + "/adm";
-        coreServiceUrlCustomer = baseUrl + "/cstm";
+        coreApiServiceUrl = baseUrl + "/api";
+        coreAdminServiceUrl = baseUrl + "/adm";
+        coreCustomerServiceUrl = baseUrl + "/cstm";
     }
 }

@@ -67,7 +67,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (path.startsWith("/smarthome-core")) {
             path = path.substring("/smarthome-core".length());
         }
-        return path.startsWith("/pub/");
+        return path.startsWith("/api/");
     }
 
     private String extractAccessTokenFromRequest(HttpServletRequest request) {

@@ -4,9 +4,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import project.smarthome.common.dto.response.UserInfo;
 import project.smarthome.common.entity.mysql.User;
 import project.smarthome.common.utils.Constants;
+import project.smarthome.common.utils.Utils;
 
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -14,6 +17,18 @@ import java.util.Collections;
 public class UserDetailsSecurity implements UserDetails {
 
     private final User user;
+
+    public UserInfo getUserInfo() {
+        return new UserInfo(
+                user.getFullName(),
+                user.getAvatar() != null ? Base64.getEncoder().encodeToString(user.getAvatar()) : null,
+                Utils.getAvatarInitials(user.getFullName()),
+                Constants.Role.ADMIN.equals(user.getRole()) ? Constants.Role.ADMIN_TEXT : Constants.Role.CUSTOMER_TEXT,
+                user.getEmail(),
+                user.getPhoneNumber(),
+                user.getHomes()
+        );
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

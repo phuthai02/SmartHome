@@ -26,8 +26,15 @@ public class User {
     @Column(name = "EMAIL")
     private String email;
 
+    @Column(name = "PHONE_NUMBER")
+    private String phoneNumber;
+
     @Column(name = "FULL_NAME")
     private String fullName;
+
+    @Lob
+    @Column(name = "AVATAR", columnDefinition = "LONGBLOB")
+    private byte[] avatar;
 
     @Column(name = "ROLE")
     private String role;

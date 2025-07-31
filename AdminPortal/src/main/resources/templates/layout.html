@@ -22,10 +22,17 @@
                 <div class="logo-icon">Nhà thông minh Vhome+</div>
             </div>
             <div class="user-info" id="userInfo">
-                <div class="user-avatar">AD</div>
+                <div class="user-avatar">
+                    <img th:if="${userInfo != null && userInfo.avatarBase64 != null}"
+                         th:src="'data:image/png;base64,' + ${userInfo.avatarBase64}"
+                         alt="Avatar"
+                         style="width: 100%; height: 100%; object-fit: cover;" />
+
+                    <span th:if="${userInfo != null && userInfo.avatarBase64 == null}" th:text="${#strings.defaultString(userInfo?.avatarText, 'NA')}"></span>
+                </div>
                 <div class="user-details">
-                    <h4>Admin User</h4>
-                    <span>Quản trị viên</span>
+                    <h4 th:text="${#strings.defaultString(userInfo?.fullName, 'Ẩn danh')}"></h4>
+                    <span th:text="${#strings.defaultString(userInfo?.role, '')}"></span>
                 </div>
                 <div class="user-dropdown-icon">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -80,11 +87,11 @@
 
             <div class="menu-section">
                 <div class="menu-title">Thiết bị và loại thiết bị</div>
-                <a class="menu-item">
+                <a class="menu-item" href="device">
                     <div class="menu-icon"><img src="icons/device.svg" alt="Thiết bị" /></div>
                     <div class="menu-text">Quản lý thiết bị</div>
                 </a>
-                <a class="menu-item">
+                <a class="menu-item" href="device-type">
                     <div class="menu-icon"><img src="icons/device-type.svg" alt="Loại thiết bị" /></div>
                     <div class="menu-text">Quản lý loại thiết bị</div>
                 </a>
@@ -147,6 +154,13 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         // connectWebsocket();
+        const currentPath = window.location.pathname.replace(/^\/+|\/+$/g, '');
+        document.querySelectorAll('.menu-item').forEach(item => {
+            const itemHref = item.getAttribute('href');
+            if (itemHref && currentPath.endsWith(itemHref)) {
+                item.classList.add('active');
+            }
+        });
     });
 
     function connectWebsocket() {

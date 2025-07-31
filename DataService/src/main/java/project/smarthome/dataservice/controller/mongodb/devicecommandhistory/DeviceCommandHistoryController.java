@@ -13,7 +13,7 @@ import project.smarthome.dataservice.service.mongodb.devicecommandhistory.Device
 public class DeviceCommandHistoryController extends BaseController<DeviceCommandHistory, String> {
 
     @Autowired
-    DeviceCommandHistoryService deviceCommandHistoryService;
+    private DeviceCommandHistoryService deviceCommandHistoryService;
 
     @Override
     protected BaseService<DeviceCommandHistory, String> getBaseService() {

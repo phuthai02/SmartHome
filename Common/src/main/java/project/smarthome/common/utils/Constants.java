@@ -6,6 +6,7 @@ public class Constants {
     public static final String AUTHORIZATION = "Authorization";
     public static final String ACCESS_TOKEN = "Access-Token";
     public static final String REFRESH_TOKEN = "Refresh-Token";
+    public static final String USER_INFO = "User-Info";
 
     public static class ClientType {
         public static final String ADMIN = "ADMIN";
@@ -15,6 +16,8 @@ public class Constants {
     public static class Role {
         public static final String ADMIN = "ROLE_ADMIN";
         public static final String CUSTOMER = "ROLE_USER";
+        public static final String ADMIN_TEXT = "Quản trị viên";
+        public static final String CUSTOMER_TEXT = "Khách hàng";
     }
 
     public static class Format {

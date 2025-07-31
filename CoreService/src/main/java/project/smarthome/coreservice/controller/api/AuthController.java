@@ -1,4 +1,4 @@
-package project.smarthome.coreservice.controller.pub;
+package project.smarthome.coreservice.controller.api;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,14 +8,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import project.smarthome.common.dto.request.AuthRequest;
 import project.smarthome.common.dto.response.AuthResponse;
 import project.smarthome.common.dto.response.ResponseAPI;
 import project.smarthome.common.utils.Constants;
 import project.smarthome.common.utils.JsonUtils;
+import project.smarthome.coreservice.model.UserDetailsSecurity;
 import project.smarthome.coreservice.service.jwt.JwtService;
 import project.smarthome.coreservice.service.user.UserDetailsSecurityService;
 
@@ -42,7 +41,8 @@ public class AuthController {
             Authentication auth = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
             );
-            UserDetails user = (UserDetails) auth.getPrincipal();
+
+            UserDetailsSecurity user = (UserDetailsSecurity) auth.getPrincipal();
 
             boolean isAdminRequest = Constants.ClientType.ADMIN.equals(request.getClientType());
             boolean isNotAdminUser = user.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals(Constants.Role.ADMIN));
@@ -54,10 +54,9 @@ public class AuthController {
             String refreshToken = jwtService.generateRefreshToken(user.getUsername());
 
             AuthResponse response = new AuthResponse(
+                    user.getUserInfo(),
                     accessToken,
                     refreshToken,
-                    user.getUsername(),
-                    user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList(),
                     jwtService.getTimeToExpiration(accessToken)
             );
 
@@ -123,14 +122,13 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseAPI.error("Invalid token"));
             }
 
-            UserDetails user = userDetailsSecurityService.loadUserByUsername(username);
+            UserDetailsSecurity user = (UserDetailsSecurity) userDetailsSecurityService.loadUserByUsername(username);
             String accessToken = jwtService.generateAccessToken(user.getUsername());
 
             AuthResponse response = new AuthResponse(
+                    user.getUserInfo(),
                     accessToken,
                     refreshToken,
-                    user.getUsername(),
-                    user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList(),
                     jwtService.getTimeToExpiration(accessToken)
             );
 

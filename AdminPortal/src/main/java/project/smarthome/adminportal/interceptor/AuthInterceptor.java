@@ -28,7 +28,6 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String requestURI = request.getRequestURI();
-        System.out.println(requestURI);
         if (requestURI.equals("/smarthome-admin/login")) {
             HttpSession session = request.getSession(false);
             String accessToken = session != null ? (String) session.getAttribute(Constants.ACCESS_TOKEN) : null;
@@ -70,7 +69,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
             HTTPRequest<ResponseAPI> httpRequest = new HTTPRequest<>(ResponseAPI.class);
             ResponseEntity<ResponseAPI> response = httpRequest.connect(
-                    CoreServiceConfig.getCoreServiceUrlPublic() + "/auth/validate",
+                    CoreServiceConfig.getCoreApiServiceUrl() + "/auth/validate",
                     null,
                     HttpMethod.GET,
                     headers,
@@ -94,7 +93,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
             HTTPRequest<ResponseAPI> httpRequest = new HTTPRequest<>(ResponseAPI.class);
             ResponseEntity<ResponseAPI> response = httpRequest.connect(
-                    CoreServiceConfig.getCoreServiceUrlPublic() + "/auth/refresh",
+                    CoreServiceConfig.getCoreApiServiceUrl() + "/auth/refresh",
                     null,
                     HttpMethod.POST,
                     null,
