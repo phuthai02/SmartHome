@@ -1,4 +1,4 @@
-package project.smarthome.coreservice.service.user;
+package project.smarthome.adminportal.service.user;
 
 import project.smarthome.common.dto.request.PageFilterRequest;
 import project.smarthome.common.dto.request.UserRequest;
@@ -9,7 +9,7 @@ public interface UserService {
     ResponseAPI getCustomers(PageFilterRequest request);
     ResponseAPI createAdmin(UserRequest request);
     ResponseAPI createCustomer(UserRequest request);
-    ResponseAPI update(UserRequest request);
-    ResponseAPI delete(Long id);
-    ResponseAPI toggleStatus(Long id);
+    ResponseAPI updateUser(Long id, UserRequest request);
+    ResponseAPI deleteUser(Long id);
+    ResponseAPI toggleUserStatus(Long id);
 }

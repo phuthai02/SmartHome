@@ -5,6 +5,166 @@
 <head>
     <title>Tài khoản khách hàng</title>
 </head>
+
+<style layout:fragment="style-extra">
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 200px;
+    }
+
+    .user-info .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+
+    .user-info .user-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .user-info .avatar-text {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 14px;
+        color: white;
+    }
+
+    .user-details {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .user-name {
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 4px;
+        margin-left: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .user-role {
+        font-size: 12px;
+        color: var(--text-secondary);
+        padding: 4px 8px;
+        background: var(--gray-100);
+        border-radius: 12px;
+        display: inline-block;
+    }
+
+    .user-username {
+        font-family: 'Monaco', 'Menlo', monospace;
+        background: var(--gray-100);
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 13px;
+        display: inline-block;
+    }
+
+    .user-email {
+        color: var(--text-primary);
+        margin-bottom: 4px;
+    }
+
+    .user-phone {
+        font-size: 12px;
+        color: var(--text-secondary);
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+    }
+
+    .btn-action {
+        padding: 8px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 32px;
+        height: 32px;
+    }
+
+    .btn-action:hover {
+        transform: scale(1.1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-edit {
+        background: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+        border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+
+    .btn-edit:hover {
+        background: rgba(245, 158, 11, 0.2);
+    }
+
+    .btn-toggle {
+        background: rgba(107, 114, 128, 0.1);
+        color: #6b7280;
+        border: 1px solid rgba(107, 114, 128, 0.2);
+    }
+
+    .btn-toggle:hover {
+        background: rgba(107, 114, 128, 0.2);
+    }
+
+    .btn-delete {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+        border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .btn-delete:hover {
+        background: rgba(239, 68, 68, 0.2);
+    }
+
+    .error-message {
+        color: rgba(239, 68, 68);
+        font-size: 10px;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-weight: 500;
+        color: var(--gray-50);
+        text-transform: capitalize;
+    }
+
+    .status-active {
+        background-color: #28a745;
+    }
+
+    .status-locked {
+        background-color: #dc3545;
+    }
+
+    .status-unknown {
+        background-color: #6c757d;
+    }
+</style>
+
 <body>
 
 <div layout:fragment="content">
@@ -55,37 +215,24 @@
                 <div class="filter-group">
                     <label>Tìm kiếm</label>
                     <div class="search-box">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                             stroke-width="2">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="11" cy="11" r="8"/>
                             <path d="m21 21-4.35-4.35"/>
                         </svg>
-                        <input type="text" placeholder="Tìm theo tên, email..." id="searchInput"
-                               oninput="filterTable()">
+                        <input type="text" placeholder="Tìm theo tên, email..." id="searchInput" oninput="filterTable()">
                     </div>
                 </div>
                 <div class="filter-group">
                     <label>Trạng thái</label>
                     <select id="statusFilter" onchange="filterTable()">
                         <option value="">Tất cả</option>
-                        <option value="active">Hoạt động</option>
-                        <option value="inactive">Không hoạt động</option>
-                        <option value="locked">Bị khóa</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Vai trò</label>
-                    <select id="roleFilter" onchange="filterTable()">
-                        <option value="">Tất cả</option>
-                        <option value="super_admin">Super Admin</option>
-                        <option value="admin">Admin</option>
-                        <option value="moderator">Moderator</option>
+                        <option value="ACTIVE">Đã kích hoạt</option>
+                        <option value="LOCKED">Vô hiệu hoá</option>
                     </select>
                 </div>
                 <div class="filter-group">
                     <button class="btn btn-outline" onclick="resetFilters()">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                             stroke-width="2">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
                         </svg>
                         Xóa bộ lọc
@@ -102,7 +249,7 @@
                         <img src="icons/user-total.svg" alt="Tổng tài khoản"/>
                     </div>
                     <div class="stat-info">
-                        <div class="stat-value">24</div>
+                        <div class="stat-value" id="totalAccounts">0</div>
                         <div class="stat-label">Tổng tài khoản</div>
                     </div>
                 </div>
@@ -113,7 +260,7 @@
                         <img src="icons/user-active.svg" alt="Đang hoạt động"/>
                     </div>
                     <div class="stat-info">
-                        <div class="stat-value">18</div>
+                        <div class="stat-value" id="activeAccounts">0</div>
                         <div class="stat-label">Đang hoạt động</div>
                     </div>
                 </div>
@@ -124,7 +271,7 @@
                         <img src="icons/user-inactive.svg" alt="Không hoạt động"/>
                     </div>
                     <div class="stat-info">
-                        <div class="stat-value">4</div>
+                        <div class="stat-value" id="inactiveAccounts">0</div>
                         <div class="stat-label">Không hoạt động</div>
                     </div>
                 </div>
@@ -135,21 +282,20 @@
                         <img src="icons/user-locked.svg" alt="Bị khóa"/>
                     </div>
                     <div class="stat-info">
-                        <div class="stat-value">2</div>
+                        <div class="stat-value" id="lockedAccounts">0</div>
                         <div class="stat-label">Bị khóa</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Data Table -->
         <div class="table-container">
             <div class="table-header">
-                <h3>Danh sách tài khoản quản trị</h3>
+                <h3>Danh sách tài khoản khách hàng</h3>
                 <div class="table-controls">
                     <select id="pageSize" onchange="changePageSize()">
-                        <option value="10">10 dòng</option>
-                        <option value="25" selected>25 dòng</option>
+                        <option value="10" selected>Số lượng: 10 dòng</option>
+                        <option value="25">25 dòng</option>
                         <option value="50">50 dòng</option>
                         <option value="100">100 dòng</option>
                     </select>
@@ -157,51 +303,53 @@
             </div>
 
             <div class="table-wrapper">
-                <table class="data-table" id="adminTable">
-                    <thead>
-                    <tr>
-                        <th>
-                            <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
-                        </th>
-                        <th>Thông tin cá nhân</th>
-                        <th>Email / Tên đăng nhập</th>
-                        <th>Vai trò</th>
-                        <th>Trạng thái</th>
-                        <th>Lần đăng nhập cuối</th>
-                        <th>Ngày tạo</th>
-                        <th>Thao tác</th>
-                    </tr>
-                    </thead>
-                    <tbody id="tableBody">
-                    <!-- Data sẽ được render bằng JavaScript -->
-                    </tbody>
-                </table>
+                <div class="scroll-wrapper">
+                    <table class="data-table">
+                        <thead>
+                        <tr>
+                            <th>Thông tin cá nhân</th>
+                            <th>Tên đăng nhập</th>
+                            <th>Email/ Số điện thoại</th>
+                            <th>Trạng thái</th>
+                            <th>Lần đăng nhập cuối</th>
+                            <th>Ngày tạo</th>
+                            <th>Thao tác</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
-            <!-- Pagination -->
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <p>Không có dữ liệu để hiển thị</p>
+            </div>
+
             <div class="table-footer">
                 <div class="pagination-info">
-                    Hiển thị <span id="showing">1-25</span> của <span id="total">156</span> kết quả
+                    Hiển thị <span id="showing">1-10</span> của <span id="total">100</span> kết quả
                 </div>
                 <div class="pagination">
                     <button class="page-btn" onclick="previousPage()" id="prevBtn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                             stroke-width="2">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M15 18l-6-6 6-6"/>
                         </svg>
                     </button>
                     <div class="page-numbers" id="pageNumbers">
-                        <!-- Page numbers sẽ được render bằng JavaScript -->
+                        <div class="page-number active">1</div>
+                        <div class="page-number">2</div>
+                        <div class="page-number">3</div>
                     </div>
                     <button class="page-btn" onclick="nextPage()" id="nextBtn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                             stroke-width="2">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M9 18l6-6-6-6"/>
                         </svg>
                     </button>
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 
@@ -222,91 +370,621 @@
                         <div class="form-group">
                             <label>Họ và tên *</label>
                             <input type="text" id="fullName" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Email *</label>
-                            <input type="email" id="email" required>
+                            <div class="error-message" id="fullNameError"></div>
                         </div>
                         <div class="form-group">
                             <label>Tên đăng nhập *</label>
                             <input type="text" id="username" required>
+                            <div class="error-message" id="usernameError"></div>
+                        </div>
+                        <div class="form-group" id="passwordGroup">
+                            <label>Mật khẩu *</label>
+                            <input type="password" id="password" required>
+                            <div class="error-message" id="passwordError"></div>
+                        </div>
+                        <div class="form-group" id="confirmPasswordGroup">
+                            <label>Xác nhận mật khẩu *</label>
+                            <input type="password" id="confirmPassword" required>
+                            <div class="error-message" id="confirmPasswordError"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="email" required>
+                            <div class="error-message" id="emailError"></div>
                         </div>
                         <div class="form-group">
                             <label>Số điện thoại</label>
-                            <input type="tel" id="phone">
+                            <input type="tel" id="phoneNumber">
+                            <div class="error-message" id="phoneNumberError"></div>
                         </div>
-                        <div class="form-group">
-                            <label>Vai trò *</label>
-                            <select id="role" required>
-                                <option value="">Chọn vai trò</option>
-                                <option value="super_admin">Super Admin</option>
-                                <option value="admin">Admin</option>
-                                <option value="moderator">Moderator</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Trạng thái</label>
-                            <select id="status">
-                                <option value="active">Hoạt động</option>
-                                <option value="inactive">Không hoạt động</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group" id="passwordGroup">
-                        <label>Mật khẩu *</label>
-                        <input type="password" id="password" required>
-                        <small>Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường và số</small>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeModal()">Hủy bỏ</button>
-                <button class="btn btn-primary" onclick="saveAccount()">Lưu thay đổi</button>
+                <button class="btn btn-primary" onclick="saveAccount()" id="saveBtn">
+                    <span id="saveText">Lưu thay đổi</span>
+                    <div class="spinner" id="saveSpinner" style="display: none;"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal modal-sm">
+            <div class="modal-header">
+                <h3>Xác nhận xóa</h3>
+                <button class="modal-close" onclick="closeDeleteModal()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa tài khoản này không? Hành động này không thể hoàn tác.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeDeleteModal()">Hủy bỏ</button>
+                <button class="btn btn-danger" onclick="confirmDelete()" id="deleteBtn">Xóa</button>
             </div>
         </div>
     </div>
 </div>
 
 <script layout:fragment="scripts">
+    let currentPage = 0;
+    let pageSize = 10;
+    let totalElements = 0;
+    let totalPages = 0;
+    let currentFilters = [];
+    let editingUserId = null;
+    let deleteUserId = null;
+    let customersData = [];
+
+    const baseUrl = document.baseURI;
+
+    document.addEventListener('DOMContentLoaded', function () {
+        loadCustomers();
+    });
+
+    async function loadCustomers() {
+        try {
+            const params = new URLSearchParams({
+                page: currentPage,
+                size: pageSize,
+                sortField: 'id',
+                sortDir: 'DESC'
+            });
+
+            currentFilters.forEach((filter, index) => {
+                params.append(`filters[${index}].field`, filter.field);
+                params.append(`filters[${index}].operator`, filter.operator);
+                params.append(`filters[${index}].value`, filter.value);
+            });
+
+            const response = await fetch(baseUrl + 'user/customers?' + params, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                customersData = data.data.content || [];
+                totalElements = data.data.totalElements || 0;
+                totalPages = data.data.totalPages || 0;
+
+                renderTable();
+                renderPagination();
+                updateStatistics();
+            } else {
+                showError('Không thể tải dữ liệu: ' + (data.message || 'Lỗi không xác định'));
+            }
+        } catch (error) {
+            showError('Lỗi kết nối. Vui lòng thử lại.');
+        }
+    }
+
+    async function saveAccount() {
+        try {
+            if (!validateForm()) {
+                return;
+            }
+            const formData = {
+                fullName: document.getElementById('fullName').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                username: document.getElementById('username').value.trim(),
+                phoneNumber: document.getElementById('phoneNumber').value.trim(),
+                password: document.getElementById('password').value,
+                confirmPassword: document.getElementById('confirmPassword').value
+            };
+
+            let url = baseUrl + 'user/customer';
+            let method = 'POST';
+
+            if (editingUserId) {
+                url = baseUrl + `user/${editingUserId}`;
+                method = 'PUT';
+                formData.id = editingUserId;
+                if (!formData.password) {
+                    delete formData.password;
+                    delete formData.confirmPassword;
+                }
+            }
+
+            const response = await fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                showSuccess(editingUserId ? 'Cập nhật tài khoản thành công!' : 'Thêm tài khoản thành công!');
+                closeModal();
+                loadCustomers();
+            } else {
+                showError(data.message || 'Có lỗi xảy ra khi lưu tài khoản');
+            }
+        } catch (error) {
+            console.error('Error saving account:', error);
+            showError('Lỗi kết nối. Vui lòng thử lại.');
+        }
+    }
+
+    async function deleteUser(userId) {
+        try {
+            const response = await fetch(baseUrl + `user/${userId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                showSuccess('Xóa tài khoản thành công!');
+                loadCustomers();
+            } else {
+                showError(data.message || 'Có lỗi xảy ra khi xóa tài khoản');
+            }
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            showError('Lỗi kết nối. Vui lòng thử lại.');
+        }
+    }
+
+    async function toggleUserStatus(userId) {
+        try {
+            const response = await fetch(baseUrl + `user/${userId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                showSuccess('Cập nhật trạng thái thành công!');
+                loadCustomers();
+            } else {
+                showError(data.message || 'Có lỗi xảy ra khi cập nhật trạng thái');
+            }
+        } catch (error) {
+            console.error('Error toggling user status:', error);
+            showError('Lỗi kết nối. Vui lòng thử lại.');
+        }
+    }
+
+    function renderTable() {
+        const tbody = document.getElementById('tableBody');
+
+        if (customersData.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8" class="text-center">Không có dữ liệu để hiển thị</td>
+                </tr>
+            `;
+            return;
+        }
+
+        tbody.innerHTML = customersData.map(user => `
+            <tr>
+                <td>
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            ${user.avatarBase64 ?
+            `<img src="data:image/jpeg;base64,${user.avatarBase64}" alt="${user.fullName}">` :
+            `<div class="avatar-text" style="color: var(--gray-50)">${user.avatarText || 'N/A'}</div>`
+        }
+                        </div>
+                        <div class="user-details">
+                            <div class="user-name">${user.fullName || 'N/A'}</div>
+                            <div class="user-role">${user.role}</div>
+                        </div>
+                    </div>
+                </td>
+                 <td>
+                    <div class="user-username">${user.username}</div>
+                </td>
+                <td>
+                    <div class="user-email">${user.email || 'N/A'}</div>
+                    <div class="user-phone">${user.phoneNumber || "N/A"}</div>
+                </td>
+                <td>
+                    <span class="status-badge
+                        ${user.status?.toLowerCase() === 'đã kích hoạt' ? 'status-active' :
+            user.status?.toLowerCase() === 'vô hiệu hoá' ? 'status-locked' :
+                'status-unknown'}">
+                        ${user.status}
+                    </span>
+                </td>
+                <td>${user.lastLoginAt || 'Chưa đăng nhập'}</td>
+                <td>${formatDate(user.createdAt) || 'N/A'}</td>
+                <td>
+                    <div class="action-buttons">
+                        <button class="btn-action btn-edit" onclick="editUser(${user.id})" title="Chỉnh sửa">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                        </button>
+                        <button class="btn-action btn-toggle" onclick="toggleUserStatus(${user.id})" title="${user.status === 'ACTIVE' ? 'Khóa tài khoản' : 'Kích hoạt tài khoản'}">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                ${user.status === 'ACTIVE' ?
+            '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><circle cx="12" cy="16" r="1"/><path d="M7 11V7a5 5 0 0110 0v4"/>' :
+            '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><circle cx="12" cy="16" r="1"/><path d="M7 11V7a5 5 0 019.9-1"/>'
+        }
+                            </svg>
+                        </button>
+                        <button class="btn-action btn-delete" onclick="showDeleteModal(${user.id})" title="Xóa">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3,6 5,6 21,6"/>
+                                <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                                <line x1="10" y1="11" x2="10" y2="17"/>
+                                <line x1="14" y1="11" x2="14" y2="17"/>
+                            </svg>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function renderPagination() {
+        const pageNumbers = document.getElementById('pageNumbers');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const showing = document.getElementById('showing');
+        const total = document.getElementById('total');
+
+        const start = currentPage * pageSize + 1;
+        const end = Math.min((currentPage + 1) * pageSize, totalElements);
+        showing.textContent = `${start}-${end}`;
+        total.textContent = totalElements;
+
+        prevBtn.disabled = currentPage === 0;
+        nextBtn.disabled = currentPage >= totalPages - 1;
+
+        let pages = '';
+        const maxVisiblePages = 5;
+        let startPage = Math.max(0, currentPage - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(totalPages - 1, startPage + maxVisiblePages - 1);
+
+        if (endPage - startPage < maxVisiblePages - 1) {
+            startPage = Math.max(0, endPage - maxVisiblePages + 1);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            pages += `
+                <button class="page-number ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">
+                    ${i + 1}
+                </button>
+            `;
+        }
+
+        pageNumbers.innerHTML = pages;
+    }
+
+    function updateStatistics() {
+        const stats = customersData.reduce((acc, user) => {
+            acc.total++;
+            if (user.status === 'Đã kích hoạt') {
+                acc.active++;
+            } else {
+                acc.locked++;
+            }
+            return acc;
+        }, {total: 0, active: 0, locked: 0});
+
+        document.getElementById('totalAccounts').textContent = totalElements;
+        document.getElementById('activeAccounts').textContent = stats.active;
+        document.getElementById('inactiveAccounts').textContent = totalElements - stats.active;
+        document.getElementById('lockedAccounts').textContent = stats.locked;
+    }
+
+    // Modal functions
     function showAddModal() {
+        editingUserId = null;
+        document.getElementById('modalTitle').textContent = 'Thêm tài khoản khách hàng';
+        document.getElementById('accountForm').reset();
+        clearErrors();
+        document.getElementById('accountModal').classList.add('show');
+    }
+
+    function editUser(userId) {
+        const user = customersData.find(u => u.id === userId);
+        if (!user) return;
+
+        editingUserId = userId;
+        document.getElementById('modalTitle').textContent = 'Chỉnh sửa tài khoản khách hàng';
+
+        // Fill form with user data
+        document.getElementById('fullName').value = user.fullName || '';
+        document.getElementById('email').value = user.email || '';
+        document.getElementById('username').value = user.username || '';
+        document.getElementById('phoneNumber').value = user.phoneNumber || '';
+
+        // Hide password fields for editing
+        document.getElementById('passwordGroup').style.display = 'none';
+        document.getElementById('confirmPasswordGroup').style.display = 'none';
+        document.getElementById('password').required = false;
+        document.getElementById('confirmPassword').required = false;
+
+        clearErrors();
         document.getElementById('accountModal').classList.add('show');
     }
 
     function closeModal() {
         document.getElementById('accountModal').classList.remove('show');
+        editingUserId = null;
+        clearErrors();
+    }
+
+    function showDeleteModal(userId) {
+        deleteUserId = userId;
+        document.getElementById('deleteModal').classList.add('show');
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').classList.remove('show');
+        deleteUserId = null;
+    }
+
+    function confirmDelete() {
+        if (deleteUserId) {
+            deleteUser(deleteUserId);
+            closeDeleteModal();
+        }
     }
 
     function filterTable() {
-        // Logic filter table
+        currentFilters = [];
+
+        const searchInput = document.getElementById('searchInput').value.trim();
+        const statusFilter = document.getElementById('statusFilter').value;
+
+        if (searchInput) {
+            currentFilters.push({
+                field: 'fullName',
+                operator: 'like',
+                value: searchInput
+            });
+        }
+
+        if (statusFilter) {
+            currentFilters.push({
+                field: 'status',
+                operator: 'eq',
+                value: statusFilter
+            });
+        }
+
+        currentPage = 0;
+        loadCustomers();
     }
 
     function resetFilters() {
-        // Logic reset filters
-    }
-
-    function exportData() {
-        // Logic export data
-    }
-
-    function toggleSelectAll() {
-        // Logic toggle select all
-    }
-
-    function changePageSize() {
-        // Logic change page size
+        document.getElementById('searchInput').value = '';
+        document.getElementById('statusFilter').value = '';
+        currentFilters = [];
+        currentPage = 0;
+        loadCustomers();
     }
 
     function previousPage() {
-        // Logic previous page
+        if (currentPage > 0) {
+            currentPage--;
+            loadCustomers();
+        }
     }
 
     function nextPage() {
-        // Logic next page
+        if (currentPage < totalPages - 1) {
+            currentPage++;
+            loadCustomers();
+        }
     }
 
-    function saveAccount() {
-        // Logic save account
+    function goToPage(page) {
+        currentPage = page;
+        loadCustomers();
     }
+
+    function changePageSize() {
+        pageSize = parseInt(document.getElementById('pageSize').value);
+        currentPage = 0;
+        loadCustomers();
+    }
+
+    function validateForm() {
+        clearErrors();
+        let isValid = true;
+
+        const fullName = document.getElementById('fullName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (!fullName) {
+            showFieldError('fullNameError', 'Họ và tên là bắt buộc');
+            isValid = false;
+        }
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            showFieldError('emailError', 'Email không hợp lệ');
+            isValid = false;
+        }
+
+        if (!username) {
+            showFieldError('usernameError', 'Tên đăng nhập là bắt buộc');
+            isValid = false;
+        } else if (username.length < 3) {
+            showFieldError('usernameError', 'Tên đăng nhập phải có ít nhất 3 ký tự');
+            isValid = false;
+        }
+
+        if (!editingUserId || password) {
+            if (!password) {
+                showFieldError('passwordError', 'Mật khẩu là bắt buộc');
+                isValid = false;
+            } else if (password.length < 8) {
+                showFieldError('passwordError', 'Mật khẩu phải có ít nhất 8 ký tự');
+                isValid = false;
+            } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
+                showFieldError('passwordError', 'Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 số');
+                isValid = false;
+            }
+            if (!confirmPassword) {
+                showFieldError('confirmPasswordError', 'Xác nhận mật khẩu là bắt buộc');
+                isValid = false;
+            } else if (password !== confirmPassword) {
+                showFieldError('confirmPasswordError', 'Mật khẩu xác nhận không khớp');
+                isValid = false;
+            }
+        }
+
+        return isValid;
+    }
+
+    function showFieldError(fieldId, message) {
+        document.getElementById(fieldId).textContent = message;
+    }
+
+    function clearErrors() {
+        const errorElements = document.querySelectorAll('.error-message');
+        errorElements.forEach(element => {
+            element.textContent = '';
+        });
+    }
+
+    function formatDate(dateString) {
+        if (!dateString) return 'N/A';
+        try {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('vi-VN') + ' ' + date.toLocaleTimeString('vi-VN');
+        } catch (error) {
+            return dateString;
+        }
+    }
+
+    function showSuccess(message) {
+        showNotification('success', 'Thành công', message);
+    }
+
+    function showError(message) {
+        showNotification('error', 'Thất bại', message);
+    }
+
+    async function exportData() {
+        try {
+            const params = new URLSearchParams({
+                page: 0,
+                size: 10000,
+                sortField: 'id',
+                sortDir: 'DESC'
+            });
+
+            currentFilters.forEach((filter, index) => {
+                params.append(`filters[${index}].field`, filter.field);
+                params.append(`filters[${index}].operator`, filter.operator);
+                params.append(`filters[${index}].value`, filter.value);
+            });
+
+            const response = await fetch(baseUrl + 'user/customers?' + params, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            });
+
+            const data = await response.json();
+
+            if (data.success && data.data.content) {
+                exportToExcel(data.data.content);
+            } else {
+                showError('Không thể xuất dữ liệu');
+            }
+        } catch (error) {
+            console.error('Error exporting data:', error);
+            showError('Lỗi khi xuất dữ liệu');
+        }
+    }
+
+    function exportToExcel(data) {
+        const headers = ['Họ và tên', 'Email', 'Tên đăng nhập', 'Số điện thoại', 'Vai trò', 'Trạng thái', 'Ngày tạo'];
+        const csvContent = [
+            headers.join(','),
+            ...data.map(user => [
+                `"${user.fullName || ''}"`,
+                `"${user.email || ''}"`,
+                `"${user.username || ''}"`,
+                `"${user.phoneNumber || ''}"`,
+                `"${user.role}"`,
+                `"${user.status}"`,
+                `"${formatDate(user.createdAt)}"`
+            ].join(','))
+        ].join('\n');
+
+        const blob = new Blob(['\ufeff' + csvContent], {type: 'text/csv;charset=utf-8;'});
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `customer_accounts_${new Date().toISOString().split('T')[0]}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    const debouncedFilter = debounce(filterTable, 300);
+    document.getElementById('searchInput').oninput = debouncedFilter;
 </script>
 </body>
 </html>

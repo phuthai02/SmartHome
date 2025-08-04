@@ -32,11 +32,11 @@ public class AuthController {
     @Autowired
     private UserDetailsSecurityService userDetailsSecurityService;
 
-    private final String prefixLogin = "[AUTH]";
+    private final String prefixLog = "[AUTH]";
 
     @PostMapping("/login")
     public ResponseEntity<ResponseAPI> login(@RequestBody AuthRequest request) {
-        log.info("{} Login request: {}", prefixLogin, JsonUtils.toJson(request));
+        log.info("{} Login request: {}", prefixLog, JsonUtils.toJson(request));
         try {
             Authentication auth = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
@@ -70,7 +70,7 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<ResponseAPI> logout(@RequestHeader("Authorization") String authHeader) {
-        log.info("{} Logout request: {}", prefixLogin, authHeader);
+        log.info("{} Logout request: {}", prefixLog, authHeader);
         try {
             if (authHeader == null || !authHeader.startsWith(Constants.JWT_BEARER)) {
                 return ResponseEntity.badRequest().body(ResponseAPI.error("Invalid header"));
@@ -92,7 +92,7 @@ public class AuthController {
 
     @GetMapping("/validate")
     public ResponseEntity<ResponseAPI> validateToken(@RequestHeader("Authorization") String authHeader) {
-        log.info("{} Validate request: {}", prefixLogin, authHeader);
+        log.info("{} Validate request: {}", prefixLog, authHeader);
         try {
             if (authHeader == null || !authHeader.startsWith(Constants.JWT_BEARER)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseAPI.error("Invalid header"));
@@ -113,7 +113,7 @@ public class AuthController {
 
     @PostMapping("/refresh")
     public ResponseEntity<ResponseAPI> refreshToken(@RequestBody AuthRequest request) {
-        log.info("{} Refresh request: {}", prefixLogin, request);
+        log.info("{} Refresh request: {}", prefixLog, request);
         try {
             String refreshToken = request.getRefreshToken();
             String username = jwtService.extractUsername(refreshToken);

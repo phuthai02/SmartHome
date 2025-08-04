@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import project.smarthome.common.utils.Constants;
 
 @Data
 @NoArgsConstructor
@@ -34,5 +35,9 @@ public class ResponseAPI {
 
     public static ResponseAPI error(String message) {
         return new ResponseAPI(false, message);
+    }
+
+    public static ResponseAPI error() {
+        return new ResponseAPI(false, Constants.Message.SYSTEM_ERROR);
     }
 }

@@ -23,7 +23,7 @@ public class HomeController {
     public String view(@PathVariable String page, Model model, HttpServletRequest request) {
         Object userInfo = request.getSession().getAttribute(Constants.USER_INFO);
         if (userInfo != null) model.addAttribute("userInfo", userInfo);
-        Resource resource = resourceLoader.getResource("classpath:/templates/contents/" + page + ".html");
+        Resource resource = resourceLoader.getResource(String.format(Constants.Format.TEMPLATE_PAGE_PATH, page));
         if (!resource.exists()) page = "404";
         return "contents/" + page;
     }

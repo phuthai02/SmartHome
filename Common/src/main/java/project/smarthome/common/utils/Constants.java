@@ -8,6 +8,10 @@ public class Constants {
     public static final String REFRESH_TOKEN = "Refresh-Token";
     public static final String USER_INFO = "User-Info";
 
+    public static class Message {
+        public static final String SYSTEM_ERROR = "Đã có lỗi xảy ra";
+    }
+
     public static class ClientType {
         public static final String ADMIN = "ADMIN";
         public static final String CUSTOMER = "CUSTOMER";
@@ -26,6 +30,7 @@ public class Constants {
         public static final String TOPIC_ALERT = "TOPIC-ALERT/VHome+/%s";
         public static final String ACCESS_TOKEN = "jwt:access:%s";
         public static final String REFRESH_TOKEN = "jwt:refresh:%s";
+        public static final String TEMPLATE_PAGE_PATH = "classpath:/templates/contents/%s.html";
     }
 
     public static class Pattern {
@@ -39,6 +44,8 @@ public class Constants {
     public static class Status {
         public static final String LOCKED = "LOCKED";
         public static final String ACTIVE = "ACTIVE";
+        public static final String LOCKED_TEXT = "Vô hiệu hoá";
+        public static final String ACTIVE_TEXT = "Đã kích hoạt";
     }
 
     public static class FilterOperator {
