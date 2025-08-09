@@ -3,7 +3,7 @@ package project.smarthome.adminportal.service.user;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import project.smarthome.adminportal.config.core.CoreServiceConfig;
-import project.smarthome.adminportal.http.HTTPRequest;
+import project.smarthome.adminportal.service.http.HTTPRequest;
 import project.smarthome.common.dto.request.PageFilterRequest;
 import project.smarthome.common.dto.request.UserRequest;
 import project.smarthome.common.dto.response.ResponseAPI;

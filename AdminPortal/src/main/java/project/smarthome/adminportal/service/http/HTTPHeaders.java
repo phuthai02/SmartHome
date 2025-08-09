@@ -1,4 +1,4 @@
-package project.smarthome.adminportal.http;
+package project.smarthome.adminportal.service.http;
 
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.http.HttpServletRequest;

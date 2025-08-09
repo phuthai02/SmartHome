@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import project.smarthome.adminportal.config.core.CoreServiceConfig;
-import project.smarthome.adminportal.http.HTTPRequest;
+import project.smarthome.adminportal.service.http.HTTPRequest;
 import project.smarthome.common.dto.request.AuthRequest;
 import project.smarthome.common.dto.response.AuthResponse;
 import project.smarthome.common.dto.response.ResponseAPI;

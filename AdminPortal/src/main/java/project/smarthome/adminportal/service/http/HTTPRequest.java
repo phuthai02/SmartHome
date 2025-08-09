@@ -1,4 +1,4 @@
-package project.smarthome.adminportal.http;
+package project.smarthome.adminportal.service.http;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;

@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import project.smarthome.adminportal.config.core.CoreServiceConfig;
-import project.smarthome.adminportal.http.HTTPRequest;
+import project.smarthome.adminportal.service.http.HTTPRequest;
 import project.smarthome.common.dto.request.AuthRequest;
 import project.smarthome.common.dto.response.AuthResponse;
 import project.smarthome.common.dto.response.ResponseAPI;
