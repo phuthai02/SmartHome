@@ -1,6 +1,6 @@
 package project.smarthome.coreservice.config.mqtt;
 
-import com.hivemq.client.mqtt.MqttClient;
+import com.hivemq.client.mqtt.mqtt5.Mqtt5AsyncClient;
 import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -36,7 +36,7 @@ public class MqttConfig {
 
     @Bean
     public Mqtt5BlockingClient hiveMqttClient() {
-        Mqtt5BlockingClient client = MqttClient.builder()
+        Mqtt5BlockingClient client = com.hivemq.client.mqtt.MqttClient.builder()
                 .useMqttVersion5()
                 .identifier(clientId + "-" + UUID.randomUUID().toString().substring(0, 8))
                 .serverHost(host)
@@ -55,21 +55,22 @@ public class MqttConfig {
     }
 
     @Bean
+    public Mqtt5AsyncClient mqttAsyncClient(Mqtt5BlockingClient blockingClient) {
+        return blockingClient.toAsync();
+    }
+
+    @Bean
     public MessageChannel mqttOutboundChannel() {
         return new DirectChannel();
     }
 
     @Bean
     @ServiceActivator(inputChannel = "mqttOutboundChannel")
-    public MessageHandler mqttOutboundHandler() {
+    public MessageHandler mqttOutboundHandler(Mqtt5BlockingClient blockingClient) {
         return message -> {
             String topic = (String) message.getHeaders().getOrDefault("topic", defaultTopic);
             String payload = (String) message.getPayload();
-
-            hiveMqttClient().publishWith()
-                    .topic(topic)
-                    .payload(StandardCharsets.UTF_8.encode(payload))
-                    .send();
+            blockingClient.publishWith().topic(topic).payload(StandardCharsets.UTF_8.encode(payload)).send();
         };
     }
 }
