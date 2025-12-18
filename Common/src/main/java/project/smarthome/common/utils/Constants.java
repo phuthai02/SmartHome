@@ -44,8 +44,6 @@ public class Constants {
     public static class Status {
         public static final String LOCKED = "LOCKED";
         public static final String ACTIVE = "ACTIVE";
-        public static final String LOCKED_TEXT = "Vô hiệu hoá";
-        public static final String ACTIVE_TEXT = "Đã kích hoạt";
     }
 
     public static class FilterOperator {

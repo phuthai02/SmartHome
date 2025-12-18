@@ -890,7 +890,7 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 16px;
+    padding: 8px 12px;
     border: none;
     border-radius: 8px;
     font-size: 14px;
@@ -1003,8 +1003,12 @@ select:focus {
     background: white;
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
     border: 1px solid var(--gray-200);
+    height: 550px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .table-header {
@@ -1013,50 +1017,56 @@ select:focus {
     align-items: center;
     padding: 16px;
     border-bottom: 1px solid var(--gray-200);
+    flex-shrink: 0;
 }
 
-.table-header h3 {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--primary-color);
+.table-controls select {
+    padding: 8px 12px;
+    border: 1px solid var(--gray-200);
+    border-radius: 6px;
+    font-size: 14px;
 }
 
-.table-wrapper {
-    width: 100%;
+.table-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.table-header-wrapper {
+    flex-shrink: 0;
     overflow-x: auto;
-    position: relative;
-    -ms-overflow-style: none;
     scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
-.table-wrapper::-webkit-scrollbar {
+.table-header-wrapper::-webkit-scrollbar {
     display: none;
 }
 
-.scroll-wrapper {
-    max-height: 100vh;
+.table-body-wrapper {
+    flex: 1;
     overflow: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-.scroll-wrapper::-webkit-scrollbar {
-    display: none;
+    scrollbar-width: thin;
 }
 
 .data-table {
-    border-collapse: collapse;
     width: 100%;
-    min-width: fit-content;
+    border-collapse: collapse;
     table-layout: fixed;
+    min-width: 900px;
 }
 
 .data-table th,
 .data-table td {
     padding: 12px;
-    text-align: left;
+    text-align: center;
     border-bottom: 1px solid var(--gray-200);
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 200px;
 }
 
 .data-table th {
@@ -1064,9 +1074,6 @@ select:focus {
     font-weight: 600;
     color: var(--text-secondary);
     font-size: 14px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
 }
 
 .data-table tbody tr:hover {
@@ -1085,6 +1092,7 @@ select:focus {
     align-items: center;
     padding: 16px;
     border-top: 1px solid var(--gray-200);
+    flex-shrink: 0;
 }
 
 .pagination-info {
@@ -1198,12 +1206,12 @@ select {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 24px;
+    padding: 16px;
     border-bottom: 1px solid var(--gray-200);
 }
 
 .modal-header h3 {
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 700;
     color: var(--primary-color);
 }

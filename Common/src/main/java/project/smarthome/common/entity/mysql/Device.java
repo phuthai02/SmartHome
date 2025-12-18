@@ -38,4 +38,9 @@ public class Device {
     @JoinColumn(name = "AREA_ID")
     @JsonBackReference("area-device")
     private Area area;
+
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    @JsonBackReference("user-device")
+    private User user;
 }

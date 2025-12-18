@@ -8,6 +8,7 @@ import project.smarthome.common.dto.response.UserResponse;
 import project.smarthome.common.utils.Constants;
 import project.smarthome.common.utils.Utils;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -47,9 +48,20 @@ public class User {
     @Column(name = "STATUS")
     private String status;
 
+    @Column(name = "CREATED_TIME")
+    private Timestamp createdTime;
+
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("user-home")
     private List<Home> homes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("user-fcm-token")
+    private List<UserFcmToken> fcmTokens = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("user-device")
+    private List<Device> devices = new ArrayList<>();
 
     public UserResponse getUserInfo() {
         UserResponse info = new UserResponse();
@@ -59,7 +71,7 @@ public class User {
         info.setAvatarText(Utils.getAvatarInitials(this.fullName));
 
         info.setRole(Constants.Role.ADMIN.equals(this.role) ? Constants.Role.ADMIN_TEXT : Constants.Role.CUSTOMER_TEXT);
-        info.setStatus(Constants.Status.ACTIVE.equals(this.status) ? Constants.Status.ACTIVE_TEXT : Constants.Status.LOCKED_TEXT);
+        info.setStatus(Constants.Status.ACTIVE.equals(this.status));
         return info;
     }
 }

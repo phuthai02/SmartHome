@@ -26,7 +26,7 @@ public class TestSchedule {
     @PostConstruct
     public void initSubscribe() {
         mqttService.subscribe(TEST_TOPIC, (topic, payload) -> {
-            String title = "Cảnh báo";
+            String title = "Cảnh báo khẩn cấp";
             String body = payload;
 
             // Gửi FCM
@@ -39,10 +39,10 @@ public class TestSchedule {
         });
     }
 
-    @Scheduled(fixedRate = 10000)
+//    @Scheduled(fixedRate = 10000)
     public void sendNotificationJob() {
         // Publish MQTT
-        String mqttMessage = "Cháy rồi";
+        String mqttMessage = "Công ty cháy rồi :))";
         mqttService.publish(TEST_TOPIC, mqttMessage);
     }
 }

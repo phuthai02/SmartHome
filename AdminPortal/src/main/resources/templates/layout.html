@@ -14,19 +14,19 @@
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
     <th:block layout:fragment="style-extra"></th:block>
-</head>
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script></head>
 <body>
 <div class="dashboard-container">
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="logo">
-                <div class="logo-icon">Nhà thông minh Vhome+</div>
+                <div class="logo-icon">Nhà thông minh VHome+</div>
             </div>
             <div class="user-info" id="userInfo">
                 <div class="user-avatar">
                     <img th:if="${userInfo != null && userInfo.avatarBase64 != null}"
                          th:src="'data:image/png;base64,' + ${userInfo.avatarBase64}"
-                         alt="Avatar"
+
                          style="width: 100%; height: 100%; object-fit: cover;" />
 
                     <span th:if="${userInfo != null && userInfo.avatarBase64 == null}" th:text="${#strings.defaultString(userInfo?.avatarText, 'NA')}"></span>
@@ -42,15 +42,15 @@
                 </div>
                 <div class="user-dropdown" id="userDropdown">
                     <a class="user-dropdown-item">
-                        <img src="icons/user.svg" alt="Thông tin tài khoản" />
+                        <img src="icons/user.svg" />
                         Thông tin tài khoản
                     </a>
                     <a class="user-dropdown-item">
-                        <img src="icons/change-pass.svg" alt="Đổi mật khẩu" />
+                        <img src="icons/change-pass.svg" />
                         Đổi mật khẩu
                     </a>
                     <a href="javascript:void(0);" class="user-dropdown-item danger" onclick="handleLogout()">
-                        <img src="icons/logout.svg" alt="Đăng xuất" />
+                        <img src="icons/logout.svg" />
                         Đăng xuất
                     </a>
                 </div>
@@ -61,11 +61,11 @@
             <div class="menu-section">
                 <div class="menu-title">Tổng quan</div>
                 <a class="menu-item" href="dashboard">
-                    <div class="menu-icon"><img src="icons/home.svg" alt="Trang chủ" /></div>
+                    <div class="menu-icon"><img src="icons/home.svg" /></div>
                     <div class="menu-text">Trang chủ</div>
                 </a>
                 <a class="menu-item" href="report">
-                    <div class="menu-icon"><img src="icons/chart.svg" alt="Thống kê" /></div>
+                    <div class="menu-icon"><img src="icons/chart.svg" /></div>
                     <div class="menu-text">Báo cáo, thống kê</div>
                 </a>
             </div>
@@ -73,15 +73,15 @@
             <div class="menu-section">
                 <div class="menu-title">Tài khoản và bảo mật</div>
                 <a class="menu-item" href="admin">
-                    <div class="menu-icon"><img src="icons/admin.svg" alt="Quản trị" /></div>
+                    <div class="menu-icon"><img src="icons/admin.svg" /></div>
                     <div class="menu-text">Tài khoản quản trị</div>
                 </a>
                 <a class="menu-item" href="customer">
-                    <div class="menu-icon"><img src="icons/customer.svg" alt="Khách hàng" /></div>
+                    <div class="menu-icon"><img src="icons/customer.svg" /></div>
                     <div class="menu-text">Tài khoản khách hàng</div>
                 </a>
                 <a class="menu-item" href="session">
-                    <div class="menu-icon"><img src="icons/session.svg" alt="Phiên đăng nhập"/></div>
+                    <div class="menu-icon"><img src="icons/session.svg"/></div>
                     <div class="menu-text">Quản lý phiên đăng nhập</div>
                 </a>
             </div>
@@ -89,11 +89,11 @@
             <div class="menu-section">
                 <div class="menu-title">Thiết bị và loại thiết bị</div>
                 <a class="menu-item" href="device">
-                    <div class="menu-icon"><img src="icons/device.svg" alt="Thiết bị" /></div>
+                    <div class="menu-icon"><img src="icons/device.svg" /></div>
                     <div class="menu-text">Quản lý thiết bị</div>
                 </a>
                 <a class="menu-item" href="device-type">
-                    <div class="menu-icon"><img src="icons/device-type.svg" alt="Loại thiết bị" /></div>
+                    <div class="menu-icon"><img src="icons/device-type.svg" /></div>
                     <div class="menu-text">Quản lý loại thiết bị</div>
                 </a>
             </div>
@@ -101,11 +101,11 @@
             <div class="menu-section">
                 <div class="menu-title">Phiên bản</div>
                 <a class="menu-item">
-                    <div class="menu-icon"><img src="icons/app-version.svg" alt="Phiên bản ứng dụng" /></div>
+                    <div class="menu-icon"><img src="icons/app-version.svg" /></div>
                     <div class="menu-text">Phiên bản ứng dụng</div>
                 </a>
                 <a class="menu-item">
-                    <div class="menu-icon"><img src="icons/device-version.svg" alt="Phiên bản thiết bị" /></div>
+                    <div class="menu-icon"><img src="icons/device-version.svg" /></div>
                     <div class="menu-text">Phiên bản thiết bị</div>
                 </a>
             </div>
@@ -113,15 +113,15 @@
             <div class="menu-section">
                 <div class="menu-title">Hệ thống</div>
                 <a class="menu-item">
-                    <div class="menu-icon"><img src="icons/setting.svg" alt="Cài đặt" /></div>
+                    <div class="menu-icon"><img src="icons/setting.svg" /></div>
                     <div class="menu-text">Cài đặt hệ thống</div>
                 </a>
                 <a class="menu-item">
-                    <div class="menu-icon"><img src="icons/history.svg" alt="Nhật ký" /></div>
+                    <div class="menu-icon"><img src="icons/history.svg" /></div>
                     <div class="menu-text">Nhật ký hoạt động</div>
                 </a>
                 <a class="menu-item">
-                    <div class="menu-icon"><img src="icons/backup.svg" alt="Sao lưu" /></div>
+                    <div class="menu-icon"><img src="icons/backup.svg" /></div>
                     <div class="menu-text">Sao lưu dữ liệu</div>
                 </a>
             </div>
@@ -129,11 +129,11 @@
             <div class="menu-section">
                 <div class="menu-title">Khác</div>
                 <a class="menu-item">
-                    <div class="menu-icon"><img src="icons/help.svg" alt="Trợ giúp" /></div>
+                    <div class="menu-icon"><img src="icons/help.svg" /></div>
                     <div class="menu-text">Trợ giúp</div>
                 </a>
                 <a class="menu-item">
-                    <div class="menu-icon"><img src="icons/contact.svg" alt="Liên hệ" /></div>
+                    <div class="menu-icon"><img src="icons/contact.svg" /></div>
                     <div class="menu-text">Liên hệ</div>
                 </a>
             </div>

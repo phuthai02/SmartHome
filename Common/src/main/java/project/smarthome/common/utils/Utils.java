@@ -2,6 +2,9 @@ package project.smarthome.common.utils;
 
 
 import io.micrometer.common.util.StringUtils;
+import project.smarthome.common.dto.response.PageFilterResponse;
+
+import java.util.function.Function;
 
 public class Utils {
 
@@ -15,5 +18,17 @@ public class Utils {
             initials.append(parts[i].substring(0, 1).toUpperCase());
         }
         return initials.toString();
+    }
+
+    public static <T, R> PageFilterResponse<R> mapPage(PageFilterResponse<T> page, Function<T, R> mapper) {
+        return PageFilterResponse.<R>builder()
+                .content(page.getContent().stream().map(mapper).toList())
+                .page(page.getPage())
+                .size(page.getSize())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .first(page.isFirst())
+                .last(page.isLast())
+                .build();
     }
 }

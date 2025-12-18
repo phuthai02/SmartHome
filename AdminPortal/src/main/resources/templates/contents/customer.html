@@ -144,6 +144,7 @@
     }
 
     .status-badge {
+        width: 120px;
         display: inline-block;
         padding: 6px 14px;
         border-radius: 8px;
@@ -163,6 +164,13 @@
     .status-unknown {
         background-color: #6c757d;
     }
+
+    .password-hint {
+        font-size: 12px;
+        color: var(--text-secondary);
+        margin-top: 4px;
+        font-style: italic;
+    }
 </style>
 
 <body>
@@ -180,35 +188,17 @@
             </div>
             <div class="topbar-right">
                 <button class="notification-btn">
-                    <img src="icons/bell.svg" alt="Thông báo"/>
+                    <img src="icons/bell.svg"/>
                     <div class="notification-badge"></div>
                 </button>
                 <button class="menu-toggle" onclick="toggleSidebar()">
-                    <img src="icons/menu.svg" alt="Menu"/>
+                    <img src="icons/menu.svg"/>
                 </button>
             </div>
         </div>
     </div>
 
     <div class="page-content">
-        <!-- Header Actions -->
-        <div class="page-header">
-            <div class="header-actions">
-                <button class="btn btn-primary" onclick="showAddModal()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 5v14M5 12h14"/>
-                    </svg>
-                    Thêm tài khoản
-                </button>
-                <button class="btn btn-secondary" onclick="exportData()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
-                    </svg>
-                    Xuất Excel
-                </button>
-            </div>
-        </div>
-
         <!-- Filters -->
         <div class="filters-section">
             <div class="filters-grid">
@@ -246,44 +236,44 @@
             <div class="stat-card">
                 <div class="stat-body">
                     <div class="stat-icon">
-                        <img src="icons/user-total.svg" alt="Tổng tài khoản"/>
+                        <img src="icons/user-total.svg"/>
                     </div>
                     <div class="stat-info">
                         <div class="stat-value" id="totalAccounts">0</div>
-                        <div class="stat-label">Tổng tài khoản</div>
+                        <div class="stat-label">Người dùng hệ thống</div>
                     </div>
                 </div>
             </div>
             <div class="stat-card">
                 <div class="stat-body">
                     <div class="stat-icon">
-                        <img src="icons/user-active.svg" alt="Đang hoạt động"/>
+                        <img src="icons/customer.svg"/>
                     </div>
                     <div class="stat-info">
-                        <div class="stat-value" id="activeAccounts">0</div>
-                        <div class="stat-label">Đang hoạt động</div>
+                        <div class="stat-value" id="totalCustomerAccounts">0</div>
+                        <div class="stat-label">Tài khoản khách hàng</div>
                     </div>
                 </div>
             </div>
             <div class="stat-card">
                 <div class="stat-body">
                     <div class="stat-icon">
-                        <img src="icons/user-inactive.svg" alt="Không hoạt động"/>
+                        <img src="icons/user-active.svg"/>
                     </div>
                     <div class="stat-info">
-                        <div class="stat-value" id="inactiveAccounts">0</div>
-                        <div class="stat-label">Không hoạt động</div>
+                        <div class="stat-value" id="activedCustomerAccounts">0</div>
+                        <div class="stat-label">Tài khoản kích hoạt</div>
                     </div>
                 </div>
             </div>
             <div class="stat-card">
                 <div class="stat-body">
                     <div class="stat-icon">
-                        <img src="icons/user-locked.svg" alt="Bị khóa"/>
+                        <img src="icons/user-locked.svg"/>
                     </div>
                     <div class="stat-info">
-                        <div class="stat-value" id="lockedAccounts">0</div>
-                        <div class="stat-label">Bị khóa</div>
+                        <div class="stat-value" id="lockedCustomerAccounts">0</div>
+                        <div class="stat-label">Tài khoản vô hiệu hoá</div>
                     </div>
                 </div>
             </div>
@@ -291,7 +281,22 @@
 
         <div class="table-container">
             <div class="table-header">
-                <h3>Danh sách tài khoản khách hàng</h3>
+                <div class="page-header">
+                    <div class="header-actions">
+                        <button class="btn btn-primary" onclick="showAddModal()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 5v14M5 12h14"/>
+                            </svg>
+                            Thêm tài khoản
+                        </button>
+                        <button class="btn btn-secondary" onclick="exportData()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                            </svg>
+                            Xuất Excel
+                        </button>
+                    </div>
+                </div>
                 <div class="table-controls">
                     <select id="pageSize" onchange="changePageSize()">
                         <option value="10" selected>Số lượng: 10 dòng</option>
@@ -302,28 +307,34 @@
                 </div>
             </div>
 
-            <div class="table-wrapper">
-                <div class="scroll-wrapper">
+            <div class="table-content">
+                <div class="table-header-wrapper" id="headerWrapper">
                     <table class="data-table">
                         <thead>
                         <tr>
                             <th>Thông tin cá nhân</th>
                             <th>Tên đăng nhập</th>
-                            <th>Email/ Số điện thoại</th>
+                            <th>Email</th>
+                            <th>Số điện thoại</th>
                             <th>Trạng thái</th>
-                            <th>Lần đăng nhập cuối</th>
+                            <th>Trạng thái online</th>
                             <th>Ngày tạo</th>
                             <th>Thao tác</th>
                         </tr>
                         </thead>
+                    </table>
+                </div>
+
+                <div class="table-body-wrapper" id="bodyWrapper">
+                    <table class="data-table">
                         <tbody id="tableBody">
                         </tbody>
                     </table>
-                </div>
-            </div>
 
-            <div id="emptyState" class="empty-state" style="display: none;">
-                <p>Không có dữ liệu để hiển thị</p>
+                    <div id="emptyState" class="empty-state" style="display: none;">
+                        <p>Không có dữ liệu để hiển thị</p>
+                    </div>
+                </div>
             </div>
 
             <div class="table-footer">
@@ -365,7 +376,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="accountForm">
+                <form id="accountForm" autocomplete="off">
                     <div class="form-grid">
                         <div class="form-group">
                             <label>Họ và tên *</label>
@@ -378,12 +389,12 @@
                             <div class="error-message" id="usernameError"></div>
                         </div>
                         <div class="form-group" id="passwordGroup">
-                            <label>Mật khẩu *</label>
+                            <label id="passwordLabel">Mật khẩu *</label>
                             <input type="password" id="password" required>
                             <div class="error-message" id="passwordError"></div>
                         </div>
                         <div class="form-group" id="confirmPasswordGroup">
-                            <label>Xác nhận mật khẩu *</label>
+                            <label id="confirmPasswordLabel">Xác nhận mật khẩu *</label>
                             <input type="password" id="confirmPassword" required>
                             <div class="error-message" id="confirmPasswordError"></div>
                         </div>
@@ -426,7 +437,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeDeleteModal()">Hủy bỏ</button>
-                <button class="btn btn-danger" onclick="confirmDelete()" id="deleteBtn">Xóa</button>
+                <button class="btn btn-primary" onclick="confirmDelete()" id="deleteBtn">Xác nhận</button>
             </div>
         </div>
     </div>
@@ -443,6 +454,17 @@
     let customersData = [];
 
     const baseUrl = document.baseURI;
+
+    const headerWrapper = document.getElementById('headerWrapper');
+    const bodyWrapper = document.getElementById('bodyWrapper');
+
+    bodyWrapper.addEventListener('scroll', function() {
+        headerWrapper.scrollLeft = bodyWrapper.scrollLeft;
+    });
+
+    headerWrapper.addEventListener('scroll', function() {
+        bodyWrapper.scrollLeft = headerWrapper.scrollLeft;
+    });
 
     document.addEventListener('DOMContentLoaded', function () {
         loadCustomers();
@@ -474,9 +496,9 @@
             const data = await response.json();
 
             if (data.success) {
-                customersData = data.data.content || [];
-                totalElements = data.data.totalElements || 0;
-                totalPages = data.data.totalPages || 0;
+                customersData = data.data || [];
+                totalElements = customersData.data.totalElements || 0;
+                totalPages = customersData.data.totalPages || 0;
 
                 renderTable();
                 renderPagination();
@@ -498,10 +520,17 @@
                 fullName: document.getElementById('fullName').value.trim(),
                 email: document.getElementById('email').value.trim(),
                 username: document.getElementById('username').value.trim(),
-                phoneNumber: document.getElementById('phoneNumber').value.trim(),
-                password: document.getElementById('password').value,
-                confirmPassword: document.getElementById('confirmPassword').value
+                phoneNumber: document.getElementById('phoneNumber').value.trim()
             };
+
+            // Chỉ thêm password vào formData nếu có giá trị
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password || confirmPassword) {
+                formData.password = password;
+                formData.confirmPassword = confirmPassword;
+            }
 
             let url = baseUrl + 'user/customer';
             let method = 'POST';
@@ -510,7 +539,9 @@
                 url = baseUrl + `user/${editingUserId}`;
                 method = 'PUT';
                 formData.id = editingUserId;
-                if (!formData.password) {
+
+                // Khi edit: nếu không có password thì xóa khỏi formData
+                if (!password) {
                     delete formData.password;
                     delete formData.confirmPassword;
                 }
@@ -591,7 +622,7 @@
     function renderTable() {
         const tbody = document.getElementById('tableBody');
 
-        if (customersData.length === 0) {
+        if (customersData.data.content.length === 0) {
             tbody.innerHTML = `
                 <tr>
                     <td colspan="8" class="text-center">Không có dữ liệu để hiển thị</td>
@@ -600,13 +631,13 @@
             return;
         }
 
-        tbody.innerHTML = customersData.map(user => `
+        tbody.innerHTML = customersData.data.content.map(user => `
             <tr>
                 <td>
                     <div class="user-info">
                         <div class="user-avatar">
                             ${user.avatarBase64 ?
-            `<img src="data:image/jpeg;base64,${user.avatarBase64}" alt="${user.fullName}">` :
+            `<img src="data:image/jpeg;base64,${user.avatarBase64}">` :
             `<div class="avatar-text" style="color: var(--gray-50)">${user.avatarText || 'N/A'}</div>`
         }
                         </div>
@@ -621,18 +652,21 @@
                 </td>
                 <td>
                     <div class="user-email">${user.email || 'N/A'}</div>
-                    <div class="user-phone">${user.phoneNumber || "N/A"}</div>
                 </td>
                 <td>
-                    <span class="status-badge
-                        ${user.status?.toLowerCase() === 'đã kích hoạt' ? 'status-active' :
-            user.status?.toLowerCase() === 'vô hiệu hoá' ? 'status-locked' :
-                'status-unknown'}">
-                        ${user.status}
+                    <div class="user-email">${user.phoneNumber || 'N/A'}</div>
+                </td>
+                <td>
+                      <span class="status-badge ${user.status ? 'status-active' : 'status-locked'}">
+                           ${user.status ? "Kích hoạt" : "Đang khoá"}
                     </span>
                 </td>
-                <td>${user.lastLoginAt || 'Chưa đăng nhập'}</td>
-                <td>${formatDate(user.createdAt) || 'N/A'}</td>
+                <td>
+                    <span class="status-badge ${user.online ? 'status-active' : 'status-locked'}">
+                           ${user.online ? "Online" : "Offline"}
+                    </span>
+                </td>
+                <td>${formatDate(user.createdTime) || 'N/A'}</td>
                 <td>
                     <div class="action-buttons">
                         <button class="btn-action btn-edit" onclick="editUser(${user.id})" title="Chỉnh sửa">
@@ -645,8 +679,7 @@
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 ${user.status === 'ACTIVE' ?
             '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><circle cx="12" cy="16" r="1"/><path d="M7 11V7a5 5 0 0110 0v4"/>' :
-            '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><circle cx="12" cy="16" r="1"/><path d="M7 11V7a5 5 0 019.9-1"/>'
-        }
+            '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><circle cx="12" cy="16" r="1"/><path d="M7 11V7a5 5 0 019.9-1"/>'}
                             </svg>
                         </button>
                         <button class="btn-action btn-delete" onclick="showDeleteModal(${user.id})" title="Xóa">
@@ -699,51 +732,57 @@
     }
 
     function updateStatistics() {
-        const stats = customersData.reduce((acc, user) => {
-            acc.total++;
-            if (user.status === 'Đã kích hoạt') {
-                acc.active++;
-            } else {
-                acc.locked++;
-            }
-            return acc;
-        }, {total: 0, active: 0, locked: 0});
-
-        document.getElementById('totalAccounts').textContent = totalElements;
-        document.getElementById('activeAccounts').textContent = stats.active;
-        document.getElementById('inactiveAccounts').textContent = totalElements - stats.active;
-        document.getElementById('lockedAccounts').textContent = stats.locked;
+        document.getElementById('totalAccounts').textContent = customersData.info.param1;
+        document.getElementById('totalCustomerAccounts').textContent =  customersData.info.param2;
+        document.getElementById('activedCustomerAccounts').textContent =  customersData.info.param3;
+        document.getElementById('lockedCustomerAccounts').textContent =  customersData.info.param4;
     }
 
-    // Modal functions
+    function setPasswordFieldsForEdit(isEditMode) {
+        const passwordLabel = document.getElementById('passwordLabel');
+        const confirmPasswordLabel = document.getElementById('confirmPasswordLabel');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+
+        if (isEditMode) {
+            passwordLabel.textContent = 'Mật khẩu mới';
+            confirmPasswordLabel.textContent = 'Xác nhận mật khẩu mới';
+            password.required = false;
+            confirmPassword.required = false;
+            password.value = '';
+            confirmPassword.value = '';
+        } else {
+            passwordLabel.textContent = 'Mật khẩu *';
+            confirmPasswordLabel.textContent = 'Xác nhận mật khẩu *';
+            password.required = true;
+            confirmPassword.required = true;
+        }
+    }
+
     function showAddModal() {
         editingUserId = null;
         document.getElementById('modalTitle').textContent = 'Thêm tài khoản khách hàng';
         document.getElementById('accountForm').reset();
         clearErrors();
+        setPasswordFieldsForEdit(false);
         document.getElementById('accountModal').classList.add('show');
     }
 
     function editUser(userId) {
-        const user = customersData.find(u => u.id === userId);
+        const user = customersData.data.content.find(u => u.id === userId);
         if (!user) return;
 
         editingUserId = userId;
         document.getElementById('modalTitle').textContent = 'Chỉnh sửa tài khoản khách hàng';
 
-        // Fill form with user data
-        document.getElementById('fullName').value = user.fullName || '';
-        document.getElementById('email').value = user.email || '';
-        document.getElementById('username').value = user.username || '';
-        document.getElementById('phoneNumber').value = user.phoneNumber || '';
+        document.getElementById('fullName').value   = user.fullName || '';
+        document.getElementById('username').value   = user.username || '';
+        document.getElementById('email').value      = user.email || '';
+        document.getElementById('phoneNumber').value= user.phoneNumber || '';
 
-        // Hide password fields for editing
-        document.getElementById('passwordGroup').style.display = 'none';
-        document.getElementById('confirmPasswordGroup').style.display = 'none';
-        document.getElementById('password').required = false;
-        document.getElementById('confirmPassword').required = false;
-
+        setPasswordFieldsForEdit(true);
         clearErrors();
+
         document.getElementById('accountModal').classList.add('show');
     }
 
@@ -751,6 +790,7 @@
         document.getElementById('accountModal').classList.remove('show');
         editingUserId = null;
         clearErrors();
+        setPasswordFieldsForEdit(false);
     }
 
     function showDeleteModal(userId) {
@@ -834,7 +874,6 @@
         let isValid = true;
 
         const fullName = document.getElementById('fullName').value.trim();
-        const email = document.getElementById('email').value.trim();
         const username = document.getElementById('username').value.trim();
         const password = document.getElementById('password').value;
         const confirmPassword = document.getElementById('confirmPassword').value;
@@ -844,36 +883,50 @@
             isValid = false;
         }
 
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            showFieldError('emailError', 'Email không hợp lệ');
-            isValid = false;
-        }
-
         if (!username) {
             showFieldError('usernameError', 'Tên đăng nhập là bắt buộc');
             isValid = false;
-        } else if (username.length < 3) {
-            showFieldError('usernameError', 'Tên đăng nhập phải có ít nhất 3 ký tự');
+        } else if (username.length < 5) {
+            showFieldError('usernameError', 'Tên đăng nhập phải có ít nhất 5 ký tự');
             isValid = false;
         }
 
-        if (!editingUserId || password) {
+        // Validate password - bắt buộc khi thêm mới, tùy chọn khi edit
+        if (!editingUserId) {
+            // Thêm mới: password bắt buộc
             if (!password) {
                 showFieldError('passwordError', 'Mật khẩu là bắt buộc');
                 isValid = false;
-            } else if (password.length < 8) {
-                showFieldError('passwordError', 'Mật khẩu phải có ít nhất 8 ký tự');
-                isValid = false;
-            } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
-                showFieldError('passwordError', 'Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 số');
+            } else if (password.length < 5) {
+                showFieldError('passwordError', 'Mật khẩu phải có ít nhất 5 ký tự');
                 isValid = false;
             }
+
             if (!confirmPassword) {
                 showFieldError('confirmPasswordError', 'Xác nhận mật khẩu là bắt buộc');
                 isValid = false;
             } else if (password !== confirmPassword) {
                 showFieldError('confirmPasswordError', 'Mật khẩu xác nhận không khớp');
                 isValid = false;
+            }
+        } else {
+            // Edit: chỉ validate nếu có nhập password
+            if (password || confirmPassword) {
+                if (!password) {
+                    showFieldError('passwordError', 'Vui lòng nhập mật khẩu mới');
+                    isValid = false;
+                } else if (password.length < 5) {
+                    showFieldError('passwordError', 'Mật khẩu phải có ít nhất 5 ký tự');
+                    isValid = false;
+                }
+
+                if (!confirmPassword) {
+                    showFieldError('confirmPasswordError', 'Vui lòng xác nhận mật khẩu mới');
+                    isValid = false;
+                } else if (password !== confirmPassword) {
+                    showFieldError('confirmPasswordError', 'Mật khẩu xác nhận không khớp');
+                    isValid = false;
+                }
             }
         }
 
@@ -934,8 +987,8 @@
 
             const data = await response.json();
 
-            if (data.success && data.data.content) {
-                exportToExcel(data.data.content);
+            if (data.success && data.data.data.content) {
+                exportToExcel(data.data.data.content);
             } else {
                 showError('Không thể xuất dữ liệu');
             }
@@ -945,30 +998,53 @@
         }
     }
 
-    function exportToExcel(data) {
-        const headers = ['Họ và tên', 'Email', 'Tên đăng nhập', 'Số điện thoại', 'Vai trò', 'Trạng thái', 'Ngày tạo'];
-        const csvContent = [
-            headers.join(','),
-            ...data.map(user => [
-                `"${user.fullName || ''}"`,
-                `"${user.email || ''}"`,
-                `"${user.username || ''}"`,
-                `"${user.phoneNumber || ''}"`,
-                `"${user.role}"`,
-                `"${user.status}"`,
-                `"${formatDate(user.createdAt)}"`
-            ].join(','))
-        ].join('\n');
+    function exportToExcel(rows) {
+        const headers = [
+            'Họ và tên',
+            'Tên đăng nhập',
+            'Email',
+            'Số điện thoại',
+            'Vai trò',
+            'Trạng thái',
+            'Trạng thái online',
+            'Ngày tạo'
+        ];
 
-        const blob = new Blob(['\ufeff' + csvContent], {type: 'text/csv;charset=utf-8;'});
-        const link = document.createElement('a');
-        const url = URL.createObjectURL(blob);
-        link.setAttribute('href', url);
-        link.setAttribute('download', `customer_accounts_${new Date().toISOString().split('T')[0]}.csv`);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        const body = rows.map(u => {
+            const statusText = (u.status === true || u.status === 'ACTIVE') ? 'Kích hoạt' : 'Đang khoá';
+            const onlineText = u.online ? 'Online' : 'Offline';
+            const created = u.createdTime ? formatDate(u.createdTime) : (u.createdAt ? formatDate(u.createdAt) : 'N/A');
+
+            return [
+                u.fullName || '',
+                u.username || '',
+                u.email || '',
+                u.phoneNumber || '',
+                u.role || '',
+                statusText,
+                onlineText,
+                created
+            ];
+        });
+
+        const worksheet = XLSX.utils.aoa_to_sheet([headers, ...body]);
+
+        worksheet['!cols'] = [
+            { wch: 30 },
+            { wch: 30 },
+            { wch: 30 },
+            { wch: 30 },
+            { wch: 30 },
+            { wch: 30 },
+            { wch: 30 },
+            { wch: 30 }
+        ];
+
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Khách hàng');
+
+        const fileName = `customer_accounts_${new Date().toISOString().split('T')[0]}.xlsx`;
+        XLSX.writeFile(workbook, fileName);
     }
 
     function debounce(func, wait) {

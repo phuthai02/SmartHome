@@ -2,21 +2,28 @@ package project.smarthome.coreservice.service.user;
 
 import io.micrometer.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.smarthome.common.dto.request.FilterRequest;
 import project.smarthome.common.dto.request.PageFilterRequest;
 import project.smarthome.common.dto.request.UserRequest;
+import project.smarthome.common.dto.response.InformationResponse;
 import project.smarthome.common.dto.response.PageFilterResponse;
 import project.smarthome.common.dto.response.ResponseAPI;
 import project.smarthome.common.dto.response.UserResponse;
 import project.smarthome.common.entity.mysql.User;
 import project.smarthome.common.utils.Constants;
+import project.smarthome.common.utils.Utils;
 import project.smarthome.coreservice.feignclient.user.UserFeignClient;
+import project.smarthome.coreservice.service.redis.RedisService;
 
+import java.sql.Timestamp;
 import java.util.Base64;
-import java.util.function.Function;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -28,12 +35,19 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private RedisService redisService;
+
     @Override
     public ResponseAPI getAdmins(PageFilterRequest request) {
         try {
             FilterRequest filterRequest = new FilterRequest("role", Constants.FilterOperator.EQUALS, Constants.Role.ADMIN);
             request.getFilters().add(filterRequest);
-            PageFilterResponse<UserResponse> response = mapPage(userFeignClient.findByPageFilter(request), User::getUserInfo);
+            PageFilterResponse<UserResponse> data = Utils.mapPage(userFeignClient.findByPageFilter(request), this::getUserInfo);
+            InformationResponse info = getInfo(Constants.Role.ADMIN);
+            Map<String, Object> response = new HashMap<>();
+            response.put("data", data);
+            response.put("info", info);
             return ResponseAPI.success(response);
         } catch (Exception e) {
             log.error("Lỗi khi lấy danh sách quản trị viên: {}", e.getMessage(), e);
@@ -46,7 +60,11 @@ public class UserServiceImpl implements UserService {
         try {
             FilterRequest filterRequest = new FilterRequest("role", Constants.FilterOperator.EQUALS, Constants.Role.CUSTOMER);
             request.getFilters().add(filterRequest);
-            PageFilterResponse<UserResponse> response = mapPage(userFeignClient.findByPageFilter(request), User::getUserInfo);
+            PageFilterResponse<UserResponse> data = Utils.mapPage(userFeignClient.findByPageFilter(request), this::getUserInfo);
+            InformationResponse info = getInfo(Constants.Role.CUSTOMER);
+            Map<String, Object> response = new HashMap<>();
+            response.put("data", data);
+            response.put("info", info);
             return ResponseAPI.success(response);
         } catch (Exception e) {
             log.error("Lỗi khi lấy danh sách khách hàng: {}", e.getMessage(), e);
@@ -66,6 +84,7 @@ public class UserServiceImpl implements UserService {
             User user = createUserFromRequest(request);
             user.setRole(Constants.Role.ADMIN);
             user.setStatus(Constants.Status.ACTIVE);
+            user.setCreatedTime(new Timestamp(System.currentTimeMillis()));
 
             User createdUser = userFeignClient.create(user);
             return createdUser != null ? ResponseAPI.success("Tạo quản trị viên thành công") : ResponseAPI.error("Tạo quản trị viên thất bại");
@@ -168,25 +187,37 @@ public class UserServiceImpl implements UserService {
     private boolean isValidUserRequest(UserRequest request, boolean isCreate) {
         if (request == null) return false;
 
+        if (StringUtils.isBlank(request.getFullName())) return false;
+        if (StringUtils.isBlank(request.getUsername())) return false;
+
         if (isCreate) {
-            if (request.getUsername() == null || request.getUsername().trim().isEmpty()) return false;
-            if (request.getPassword() == null || request.getPassword().trim().isEmpty()) return false;
-            if (request.getConfirmPassword() == null || !request.getPassword().equals(request.getConfirmPassword()))
-                return false;
+            if (StringUtils.isBlank(request.getPassword())) return false;
+            if (StringUtils.isBlank(request.getConfirmPassword())) return false;
+            if (!request.getPassword().equals(request.getConfirmPassword())) return false;
+            if (request.getPassword().trim().length() < 5) return false;
+        } else {
+            if (!StringUtils.isBlank(request.getPassword())) {
+                if (StringUtils.isBlank(request.getConfirmPassword())) return false;
+                if (!request.getPassword().equals(request.getConfirmPassword())) return false;
+                if (request.getPassword().trim().length() < 5) return false;
+            }
         }
 
-        if (request.getEmail() != null && !isValidEmail(request.getEmail())) return false;
-        if (request.getPhoneNumber() != null && !isValidPhoneNumber(request.getPhoneNumber())) return false;
+        if (request.getUsername().trim().length() < 5) return false;
+
+        if (!StringUtils.isBlank(request.getEmail()) && !isValidEmail(request.getEmail())) return false;
+
+        if (!StringUtils.isBlank(request.getPhoneNumber()) && !isValidPhoneNumber(request.getPhoneNumber())) return false;
 
         return true;
     }
 
     private boolean isValidEmail(String email) {
-        return email != null && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
+        return email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
     }
 
     private boolean isValidPhoneNumber(String phoneNumber) {
-        return phoneNumber != null && phoneNumber.matches("^[+]?[0-9]{10,15}$");
+        return phoneNumber.matches("^[+]?[0-9]{10,15}$");
     }
 
     private User createUserFromRequest(UserRequest request) {
@@ -208,12 +239,49 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    private InformationResponse getInfo(String role) {
+        List<User> users = userFeignClient.findAll();
+
+        List<User> usersByRole = users.stream()
+                .filter(u -> role.equals(u.getRole()))
+                .toList();
+
+        int totalByRoleActive = (int) usersByRole.stream()
+                .filter(u -> Constants.Status.ACTIVE.equals(u.getStatus()))
+                .count();
+
+        int totalByRoleLocked = (int) usersByRole.stream()
+                .filter(u -> Constants.Status.LOCKED.equals(u.getStatus()))
+                .count();
+
+        return new InformationResponse(
+                users.size(),
+                usersByRole.size(),
+                totalByRoleActive,
+                totalByRoleLocked
+        );
+    }
+
     private void updateUserFromRequest(User user, UserRequest request) {
-        if (request.getUsername() != null) user.setUsername(request.getUsername());
-        if (!StringUtils.isBlank(request.getPassword())) user.setPassword(passwordEncoder.encode(request.getPassword()));
-        if (request.getFullName() != null) user.setFullName(request.getFullName());
-        if (request.getEmail() != null) user.setEmail(request.getEmail());
-        if (request.getPhoneNumber() != null) user.setPhoneNumber(request.getPhoneNumber());
+        if (!StringUtils.isBlank(request.getUsername())) {
+            user.setUsername(request.getUsername());
+        }
+
+        if (!StringUtils.isBlank(request.getPassword())) {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
+
+        if (!StringUtils.isBlank(request.getFullName())) {
+            user.setFullName(request.getFullName());
+        }
+
+        if (request.getEmail() != null) {
+            user.setEmail(StringUtils.isBlank(request.getEmail()) ? null : request.getEmail());
+        }
+
+        if (request.getPhoneNumber() != null) {
+            user.setPhoneNumber(StringUtils.isBlank(request.getPhoneNumber()) ? null : request.getPhoneNumber());
+        }
 
         if (request.getAvatarBase64() != null) {
             if (request.getAvatarBase64().trim().isEmpty()) {
@@ -228,15 +296,10 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private <T, R> PageFilterResponse<R> mapPage(PageFilterResponse<T> page, Function<T, R> mapper) {
-        return PageFilterResponse.<R>builder()
-                .content(page.getContent().stream().map(mapper).toList())
-                .page(page.getPage())
-                .size(page.getSize())
-                .totalElements(page.getTotalElements())
-                .totalPages(page.getTotalPages())
-                .first(page.isFirst())
-                .last(page.isLast())
-                .build();
+    private UserResponse getUserInfo(User user) {
+        UserResponse info = user.getUserInfo();
+        String key = String.format(Constants.Format.ACCESS_TOKEN, user.getUsername());
+        info.setOnline(redisService.exists(key));
+        return info;
     }
 }

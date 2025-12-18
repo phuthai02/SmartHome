@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import project.smarthome.common.entity.mysql.Home;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Data
@@ -19,6 +20,8 @@ public class UserResponse {
     private String email;
     private String phoneNumber;
     private String role;
-    private String status;
+    private Boolean status;
+    private Boolean online;
+    private Timestamp createdTime;
     private List<Home> homes;
 }
