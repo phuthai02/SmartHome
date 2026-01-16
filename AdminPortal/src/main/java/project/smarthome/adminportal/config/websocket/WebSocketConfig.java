@@ -1,4 +1,4 @@
-package project.smarthome.adminportal.config.websoket;
+package project.smarthome.adminportal.config.websocket;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
